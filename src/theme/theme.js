@@ -1,22 +1,25 @@
 export default {
   colors: {
-    // square: "#EEE70A",
-    square: "#12E8D5",
-    Z: "#BA08F3",
-    // ZTwo: "#15D71D",
-    ZTwo: "#F509D5",
-    L: "#FC0202",
-    line: "#62F70D",
-    camel: "#FCCB02",
+    green: "#9ece6a",
+    red: "#f7768e",
+    blue: "#2ac3de",
+    purple: "#bb9af7",
+    orange: "#e0af68",
+    background: "#1a1b26",
+    grid: "#414868",
+    gridBorder: "#1a1b26",
+    // gameBorder: "#a9b1d6"
+    gameBorder: "#ff9e64"
+    // gameBorder: "#cfc9c2"
   },
   breakpoints: {
     small: "300px",
     medium: "1000px",
-    large: "1400px",
+    large: "1400px"
   },
   squareSizes: {
     small: "",
-    medium: "",
-    large: "40",
-  },
+    medium: "30",
+    large: "40"
+  }
 };

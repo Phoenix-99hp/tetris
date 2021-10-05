@@ -2,13 +2,13 @@ import React from "react";
 import {
   StyledPageContainer,
   StyledMainContent,
-  StyledHeader,
+  StyledHeader
 } from "./LayoutStyle";
 
 const Layout = ({ children }) => {
   return (
     <StyledPageContainer>
-      <StyledHeader>Tetris</StyledHeader>
+      <StyledHeader>Tokyo Tetris</StyledHeader>
       <StyledMainContent>{children}</StyledMainContent>
     </StyledPageContainer>
   );

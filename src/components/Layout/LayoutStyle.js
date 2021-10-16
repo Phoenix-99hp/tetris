@@ -9,27 +9,41 @@ export const StyledPageContainer = styled.div`
   width: 100vw;
   background-color: ${({ theme }) => theme.colors.background};
   align-items: center;
-  padding: 10px;
+  // padding: 10px;
   box-sizing: border-box;
 `;
 
 export const StyledMainContent = styled.main`
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   width: 100%;
   position: relative;
   justify-content: center;
   align-items: center;
   color: white;
+  flex: 1 1 100%;
 `;
 
 export const StyledHeader = styled.header`
   display: flex;
   height: fit-content;
-  flex: 0 1 60px;
+  flex: 0 1 70px;
   justify-content: center;
   align-items: center;
   width: 100%;
   color: white;
-  padding-bottom: 10px;
+  padding: 10px 0;
+  font-size: 25px;
+  box-sizing: border-box;
+`;
+
+export const StyledFooter = styled.footer`
+  display: flex;
+  flex: 0 1 70px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  color: white;
+  padding-top: 10px;
+  box-sizing: border-box;
 `;

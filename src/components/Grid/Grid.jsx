@@ -1,6 +1,19 @@
 import React, { useEffect, useRef, useReducer, useCallback } from "react";
 import { useTheme } from "styled-components";
-import { StyledOuter, StyledInner, StyledGridContainer } from "./GridStyle";
+import {
+  StyledNextShapeContainer,
+  StyledNextShape,
+  StyledNextShapeGrid,
+  StyledScoreContainer,
+  StyledButtonContainer,
+  StyledScore,
+  StyledScoreValueContainer,
+  StyledScoreValue,
+  StyledToast,
+  StyledToastValue,
+  StyledOuter,
+  StyledGridContainer
+} from "./GridStyle";
 import GridItem from "../GridItem/GridItem.jsx";
 
 const generateSquares = () => {
@@ -31,61 +44,211 @@ const generateSquares = () => {
   return generated;
 };
 
+const determineShape = () => {
+  const shapeNumber = Math.floor(Math.random() * 5);
+  switch (shapeNumber) {
+    case 0:
+      return { num: 0, color: "blue" };
+    case 1:
+      return { num: 1, color: "red" };
+    case 2:
+      return { num: 2, color: "purple" };
+    case 3:
+      return { num: 3, color: "orange" };
+    case 4:
+      return { num: 4, color: "green" };
+  }
+};
+
+const determineOrientation = () => {
+  return Math.floor(Math.random() * 4);
+};
+
+const determineStartingCoordinates = (shape, orientation, direction) => {
+  if (shape === 0) {
+    // square
+    return [4, 5, 14, 15];
+  } else if (shape === 1) {
+    // line
+    if (orientation === 0 || orientation === 2) {
+      return [3, 4, 5, 6];
+    } else {
+      return [4, 14, 24, 34];
+    }
+  } else if (shape === 2) {
+    // L
+    if (direction === 0) {
+      if (orientation === 0) {
+        return [3, 4, 5, 15];
+      } else if (orientation === 1) {
+        return [4, 14, 23, 24];
+      } else if (orientation === 2) {
+        return [3, 13, 14, 15];
+      } else if (orientation === 3) {
+        return [4, 5, 14, 24];
+      }
+    } else {
+      if (orientation === 0) {
+        return [5, 13, 14, 15];
+      } else if (orientation === 1) {
+        return [4, 14, 24, 25];
+      } else if (orientation === 2) {
+        return [3, 4, 5, 13];
+      } else if (orientation === 3) {
+        return [4, 5, 15, 25];
+      }
+    }
+  } else if (shape === 3) {
+    // Z
+    if (direction === 0) {
+      if (orientation === 0 || orientation === 2) {
+        return [4, 5, 13, 14];
+      } else if (orientation === 1 || orientation === 3) {
+        return [4, 14, 15, 25];
+      }
+    } else {
+      if (orientation === 0 || orientation === 2) {
+        return [3, 4, 14, 15];
+      } else if (orientation === 1 || orientation === 3) {
+        return [5, 14, 15, 24];
+      }
+    }
+  } else if (shape === 4) {
+    //camel
+    if (orientation === 0) {
+      return [3, 4, 5, 14];
+    } else if (orientation === 1) {
+      return [4, 13, 14, 24];
+    } else if (orientation === 2) {
+      return [4, 13, 14, 15];
+    } else {
+      return [4, 14, 15, 24];
+    }
+  }
+};
+
 const generated = generateSquares();
+
+const nextShape = determineShape();
+const nextOrientation = determineOrientation();
+const nextDirection =
+  nextShape.num === 2 || nextShape.num === 3
+    ? Math.floor(Math.random() * 2)
+    : null;
+const nextCoordinates = determineStartingCoordinates(
+  nextShape.num,
+  nextOrientation,
+  nextDirection
+);
 
 const initialState = {
   activeShape: { num: null, color: null },
   activeOrientation: null,
   activeCoordinates: null,
-  shouldUpdateCoordinates: true,
-  shouldGenerateNewShape: true,
+  shouldGenerateNewShape: false,
   squares: generated,
   keyPressed: false,
   direction: null,
-  squaresToReset: []
+  score: 0,
+  rowToast: null,
+  lockToast: 100,
+  showRowToast: false,
+  showLockToast: false,
+  rowsToReset: null,
+  nextShape: {
+    shape: nextShape,
+    orientation: nextOrientation,
+    coordinates: nextCoordinates,
+    direction: nextDirection
+  },
+  nextSquares: {
+    total: [],
+    colored: []
+  },
+  paused: true
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case "CHECK_FOR_FULL_ROWS":
       const coordinateRow = [];
-      const rowsToReset = [];
+      const RTR = [];
       state.activeCoordinates.forEach(coordinate => {
-        let filtered = state.squares.filter(
+        const filtered = state.squares.filter(
           square =>
             square.coordinate && state.squares[coordinate].row == square.row
         );
         if (filtered[9] && !coordinateRow.includes(filtered[9].row)) {
           coordinateRow.push(filtered[9].row);
-          rowsToReset.push(filtered);
+          RTR.push(filtered);
         }
       });
-      if (rowsToReset[0]) {
-        rowsToReset.forEach(arr => {
+      const RTRcheck = RTR[0] ? RTR : null;
+      const rowToastValue = RTR[0] ? 1000 * RTR.length : null;
+      const scoreValue = state.score + rowToastValue + 100;
+      return {
+        ...state,
+        rowsToReset: RTRcheck,
+        score: scoreValue,
+        rowToast: rowToastValue
+      };
+    case "RESET_ROWS":
+      if (state.rowsToReset) {
+        state.rowsToReset.forEach(arr => {
           arr.forEach(square => {
             if (state.squares.includes(square)) {
               state.squares.splice(state.squares.indexOf(square), 1, {
                 ...square,
-                coordinate: null,
-                color: "black"
+                color: "red",
+                coordinate: null
               });
             }
           });
         });
-        const highestResetRow = rowsToReset[0][0].row;
-        const numberOfRowsReset = rowsToReset.length;
-        for (let i = 199; i > 0; i--) {
-          if (state.squares[i].row < highestResetRow) {
-            state.squares.splice(i + numberOfRowsReset * 10, 1, {
-              ...state.squares[i],
-              row: state.squares[i].row + numberOfRowsReset,
-              coordinate: state.squares[i].coordinate
-                ? state.squares[i].coordinate + numberOfRowsReset * 10
-                : null
-            });
+        state.rowsToReset.forEach(rowToReset => {
+          for (let i = 199; i > 0; i--) {
+            if (state.squares[i].row < rowToReset[0].row) {
+              state.squares.splice(i + 10, 1, {
+                ...state.squares[i],
+                row: state.squares[i].row + 1,
+                coordinate: state.squares[i].coordinate
+                  ? state.squares[i].coordinate + 10
+                  : null
+              });
+            }
           }
-        }
+        });
       }
+    case "SET_LOCK_TOAST":
+      return {
+        ...state,
+        showLockToast: true
+      };
+    case "SET_ROW_TOAST":
+      return {
+        ...state,
+        showRowToast: state.rowToast ? true : false
+      };
+    case "HIDE_LOCK_TOAST":
+      return {
+        ...state,
+        showLockToast: false
+      };
+    case "HIDE_ROW_TOAST":
+      return {
+        ...state,
+        showRowToast: false
+      };
+    case "PAUSE":
+      return {
+        ...state,
+        paused: true
+      };
+    case "START":
+      return {
+        ...state,
+        paused: false
+      };
     case "SET_ACTIVE_SHAPE":
       const shape = determineShape();
       const orientation = determineOrientation();
@@ -98,10 +261,10 @@ const reducer = (state, action) => {
         orientation,
         direction
       );
-      // console.log(state.squares, "STATE SQUARES");
-      let filtered = state.squares.filter(
+      const filtered = state.squares.filter(
         square => square.coordinate && coordinates.includes(square.coordinate)
       );
+
       if (filtered[0]) {
         // if (filtered[0] && filtered.filter(coordinate => coordinate < 10)[0]) {
         //   return {
@@ -128,17 +291,42 @@ const reducer = (state, action) => {
           ...state,
           gameOver: true
         };
-      } else {
+      } else if (state.nextShape.shape.color) {
         return {
           ...state,
-          activeShape: shape,
-          activeOrientation: orientation,
-          activeCoordinates: coordinates,
+          activeShape: state.nextShape.shape,
+          activeOrientation: state.nextShape.orientation,
+          activeCoordinates: state.nextShape.coordinates,
+          direction: state.nextShape.direction,
           shouldGenerateNewShape: false,
-          shouldUpdateCoordinates: true,
-          direction: direction
+          rowsToReset: null,
+          nextShape: {
+            shape: shape,
+            orientation: orientation,
+            coordinates: coordinates,
+            direction: direction
+          }
         };
       }
+    case "UPDATE_NEXT_SQUARES":
+      const newSquares = [];
+      for (let i = 0; i < action.payload; i++) {
+        newSquares.push(i);
+      }
+      const coloredCoordinates = {
+        0: [0, 1, 2, 3],
+        1: [0, 1, 2, 3],
+        2: [0, 2, 4, 5],
+        3: [0, 1, 4, 5],
+        4: [1, 3, 4, 5]
+      };
+      return {
+        ...state,
+        nextSquares: {
+          total: newSquares,
+          colored: coloredCoordinates[state.nextShape.shape.num]
+        }
+      };
     case "SLIDE_COORDINATES":
       if (
         !state.activeCoordinates.filter(
@@ -171,7 +359,11 @@ const reducer = (state, action) => {
         };
       }
     case "TRIGGER_MANUAL_DOWN":
-      if (
+      if (state.paused) {
+        return {
+          ...state
+        };
+      } else if (
         !state.activeCoordinates.filter(
           coordinate =>
             coordinate > 189 || state.squares[coordinate + 10].coordinate
@@ -202,7 +394,13 @@ const reducer = (state, action) => {
         };
       }
     case "TRIGGER_MANUAL_RIGHT":
-      if (state.activeCoordinates.filter(coordinate => coordinate > 189)[0]) {
+      if (state.paused) {
+        return {
+          ...state
+        };
+      } else if (
+        state.activeCoordinates.filter(coordinate => coordinate > 189)[0]
+      ) {
         return {
           ...state,
           squares: state.squares.map((square, i) =>
@@ -239,7 +437,13 @@ const reducer = (state, action) => {
         };
       }
     case "TRIGGER_MANUAL_LEFT":
-      if (state.activeCoordinates.filter(coordinate => coordinate > 189)[0]) {
+      if (state.paused) {
+        return {
+          ...state
+        };
+      } else if (
+        state.activeCoordinates.filter(coordinate => coordinate > 189)[0]
+      ) {
         return {
           ...state,
           squares: state.squares.map((square, i) =>
@@ -276,7 +480,13 @@ const reducer = (state, action) => {
         };
       }
     case "TRIGGER_MANUAL_ROTATE":
-      if (state.activeCoordinates.filter(coordinate => coordinate > 189)[0]) {
+      if (state.paused) {
+        return {
+          ...state
+        };
+      } else if (
+        state.activeCoordinates.filter(coordinate => coordinate > 189)[0]
+      ) {
         return {
           ...state,
           squares: state.squares.map((square, i) =>
@@ -871,105 +1081,21 @@ const reducer = (state, action) => {
               : state.activeCoordinates
           };
         }
+      } else {
+        return {
+          ...state,
+          keyPressed: true
+        };
       }
-      return {
-        ...state,
-        keyPressed: true
-      };
-
     case "KEYUP":
       return {
         ...state,
         keyPressed: false
       };
-    default: {
+    default:
       return {
         ...state
       };
-    }
-  }
-};
-
-const determineShape = () => {
-  const shapeNumber = Math.floor(Math.random() * 5);
-  switch (shapeNumber) {
-    case 0:
-      return { num: 0, color: "blue" };
-    case 1:
-      return { num: 1, color: "red" };
-    case 2:
-      return { num: 2, color: "purple" };
-    case 3:
-      return { num: 3, color: "orange" };
-    case 4:
-      return { num: 4, color: "green" };
-  }
-};
-
-const determineOrientation = () => {
-  return Math.floor(Math.random() * 4);
-};
-
-const determineStartingCoordinates = (shape, orientation, direction) => {
-  if (shape === 0) {
-    // square
-    return [4, 5, 14, 15];
-  } else if (shape === 1) {
-    // line
-    if (orientation === 0 || orientation === 2) {
-      return [3, 4, 5, 6];
-    } else {
-      return [4, 14, 24, 34];
-    }
-  } else if (shape === 2) {
-    // L
-    if (direction === 0) {
-      if (orientation === 0) {
-        return [3, 4, 5, 15];
-      } else if (orientation === 1) {
-        return [4, 14, 23, 24];
-      } else if (orientation === 2) {
-        return [3, 13, 14, 15];
-      } else if (orientation === 3) {
-        return [4, 5, 14, 24];
-      }
-    } else {
-      if (orientation === 0) {
-        return [5, 13, 14, 15];
-      } else if (orientation === 1) {
-        return [4, 14, 24, 25];
-      } else if (orientation === 2) {
-        return [3, 4, 5, 13];
-      } else if (orientation === 3) {
-        return [4, 5, 15, 25];
-      }
-    }
-  } else if (shape === 3) {
-    // Z
-    if (direction === 0) {
-      if (orientation === 0 || orientation === 2) {
-        return [4, 5, 13, 14];
-      } else if (orientation === 1 || orientation === 3) {
-        return [4, 14, 15, 25];
-      }
-    } else {
-      if (orientation === 0 || orientation === 2) {
-        return [3, 4, 14, 15];
-      } else if (orientation === 1 || orientation === 3) {
-        return [5, 14, 15, 24];
-      }
-    }
-  } else if (shape === 4) {
-    //camel
-    if (orientation === 0) {
-      return [3, 4, 5, 14];
-    } else if (orientation === 1) {
-      return [4, 13, 14, 24];
-    } else if (orientation === 2) {
-      return [4, 13, 14, 15];
-    } else {
-      return [4, 14, 15, 24];
-    }
   }
 };
 
@@ -1001,58 +1127,125 @@ const Grid = () => {
     }
   }, []);
 
+  const pauseHandler = () => {
+    state.paused ? dispatch({ type: "START" }) : dispatch({ type: "PAUSE" });
+  };
+
   useEffect(() => {
     if (!isMounted.current) {
       dispatch({ type: "SET_ACTIVE_SHAPE" });
       window.addEventListener("keydown", keydownHandler);
       window.addEventListener("keyup", keyupHandler);
     } else if (state.gameOver) {
-      console.log("GO");
       window.removeEventListener("keydown", keydownHandler);
       window.removeEventListener("keyup", keyupHandler);
     } else if (state.shouldGenerateNewShape) {
       dispatch({ type: "CHECK_FOR_FULL_ROWS" });
+      dispatch({ type: "SET_LOCK_TOAST" });
+      dispatch({ type: "SET_ROW_TOAST" });
+      dispatch({ type: "RESET_ROWS" });
       dispatch({ type: "SET_ACTIVE_SHAPE" });
     }
-    // return () => {
-    //   window.removeEventListener("keydown", keydownHandler);
-    //   window.removeEventListener("keyup", keyupHandler);
-    // };
   }, [state.shouldGenerateNewShape, state.gameOver]);
+
+  // useEffect(() => {
+  //   if (isMounted.current && state.rowToast) {
+  //     dispatch({ type: "SET_ROW_TOAST" });
+  //   }
+  // }, [state.rowToast]);
+
+  useEffect(() => {
+    dispatch({
+      type: "UPDATE_NEXT_SQUARES",
+      payload:
+        theme.nextShape[state.nextShape.shape.num].rows *
+        theme.nextShape[state.nextShape.shape.num].cols
+    });
+  }, [state.nextShape]);
 
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
     } else if (state.keyPressed) {
       dispatch({ type: "KEYUP" });
-    } else if (!state.keyPressed) {
+    } else if (!state.paused) {
       setTimeout(() => {
         dispatch({ type: "SLIDE_COORDINATES" });
       }, 400);
     }
-  }, [state.activeCoordinates]);
+  }, [state.activeCoordinates, state.paused]);
 
   return (
-    <StyledOuter>
-      {/* <StyledInner> */}
-      <StyledGridContainer>
-        {state.squares.map(({ coordinate, color, row }, index) => (
-          <GridItem
-            row={row}
-            color={
-              coordinate
-                ? theme.colors[color]
-                : state.activeCoordinates &&
-                  state.activeCoordinates.includes(index)
-                ? theme.colors[state.activeShape.color]
-                : theme.colors.grid
-            }
-            key={index}
-          />
-        ))}
-      </StyledGridContainer>
-      {/* </StyledInner> */}
-    </StyledOuter>
+    <>
+      <StyledNextShapeContainer>
+        <span>Next Shape</span>
+        <StyledNextShape>
+          <StyledNextShapeGrid
+            color={state.nextShape.shape.color}
+            shape={state.nextShape.shape.num}
+          >
+            {state.nextSquares.total.map(square => (
+              <GridItem
+                next={true}
+                color={
+                  state.nextSquares.colored.includes(square)
+                    ? theme.colors[state.nextShape.shape.color]
+                    : ""
+                }
+                key={square}
+              />
+            ))}
+          </StyledNextShapeGrid>
+        </StyledNextShape>
+      </StyledNextShapeContainer>
+      <StyledOuter>
+        <StyledGridContainer>
+          {state.squares.map(({ coordinate, color, row }, index) => (
+            <GridItem
+              row={row}
+              color={
+                coordinate
+                  ? theme.colors[color]
+                  : state.activeCoordinates &&
+                    state.activeCoordinates.includes(index)
+                  ? theme.colors[state.activeShape.color]
+                  : color
+                  ? color
+                  : theme.colors.grid
+              }
+              key={index}
+            />
+          ))}
+        </StyledGridContainer>
+      </StyledOuter>
+      <StyledScoreContainer>
+        <StyledScoreValueContainer>
+          <span>Score:</span>
+          <StyledScoreValue> {state.score}</StyledScoreValue>
+        </StyledScoreValueContainer>
+        <StyledScore>
+          <StyledToast
+            show={state.showLockToast}
+            onAnimationEnd={() => dispatch({ type: "HIDE_LOCK_TOAST" })}
+          >
+            <span>Shape Locked</span>
+            <StyledToastValue>{`+ ${state.lockToast}`}</StyledToastValue>
+          </StyledToast>
+          <StyledToast
+            show={state.showRowToast}
+            onAnimationEnd={() => dispatch({ type: "HIDE_ROW_TOAST" })}
+          >
+            <span>Row Complete</span>
+            <StyledToastValue>{`+ ${state.rowToast}`}</StyledToastValue>
+          </StyledToast>
+        </StyledScore>
+        <StyledButtonContainer>
+          <button onClick={pauseHandler}>
+            {state.paused ? "Start" : "Pause"}
+          </button>
+        </StyledButtonContainer>
+      </StyledScoreContainer>
+    </>
   );
 };
 

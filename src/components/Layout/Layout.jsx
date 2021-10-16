@@ -2,7 +2,8 @@ import React from "react";
 import {
   StyledPageContainer,
   StyledMainContent,
-  StyledHeader
+  StyledHeader,
+  StyledFooter
 } from "./LayoutStyle";
 
 const Layout = ({ children }) => {
@@ -10,6 +11,7 @@ const Layout = ({ children }) => {
     <StyledPageContainer>
       <StyledHeader>Tokyo Tetris</StyledHeader>
       <StyledMainContent>{children}</StyledMainContent>
+      <StyledFooter></StyledFooter>
     </StyledPageContainer>
   );
 };

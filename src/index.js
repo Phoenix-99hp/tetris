@@ -6,11 +6,9 @@ import { ThemeProvider } from "styled-components";
 import GlobalStyle from "./theme/globalStyle";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={Theme}>
-      <GlobalStyle />
-      <App />
-    </ThemeProvider>
-  </React.StrictMode>,
+  <ThemeProvider theme={Theme}>
+    <GlobalStyle />
+    <App />
+  </ThemeProvider>,
   document.getElementById("root")
 );

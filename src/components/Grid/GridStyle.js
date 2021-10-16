@@ -93,9 +93,10 @@ export const StyledScoreContainer = styled.div`
   align-items: center;
   padding-left: 10px;
   padding-right: 10px;
-  // white-space: nowrap;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   // position: relative;
 `;
 
@@ -148,11 +149,17 @@ export const StyledToastValue = styled.span`
 
 export const StyledScoreValueContainer = styled.div`
   display: flex;
+  max-width: 300px;
   flex: 1 1 100%;
   align-items: center;
   justify-content: center;
   padding-bottom: 10px;
   height: 40px;
+  position: relative;
+
+  > span {
+    position: relative;
+  }
 
   // width: 200px;
   // position: absolute;
@@ -163,7 +170,12 @@ export const StyledScoreValueContainer = styled.div`
 `;
 
 export const StyledScoreValue = styled.span`
-  font-size: 25px;
+  font-size: 20px;
   padding-left: 5px;
+  max-width: calc(300px - 70px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // position: relative;
   color: ${({ theme }) => theme.colors.green};
 `;

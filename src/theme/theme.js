@@ -13,7 +13,7 @@ export default {
   },
   breakpoints: {
     small: "300px",
-    medium: "1000px",
+    medium: "900px",
     large: "1400px"
   },
   squareSizes: {

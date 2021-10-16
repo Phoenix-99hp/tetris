@@ -127,6 +127,18 @@ const determineStartingCoordinates = (shape, orientation, direction) => {
   }
 };
 
+const commifyScore = value => {
+  const score = value.toString().split("");
+  const mapped = score.map((num, i) => {
+    if (score.length >= 4 && i < score.length - 1 && score[i + 3]) {
+      return `${num}comma`;
+    } else {
+      return num;
+    }
+  });
+  return mapped.toString().replace(/,/g, "").replace("comma", ",");
+};
+
 const generated = generateSquares();
 
 const nextShape = determineShape();
@@ -165,7 +177,8 @@ const initialState = {
     total: [],
     colored: []
   },
-  paused: true
+  paused: true,
+  commifiedScore: 0
 };
 
 const reducer = (state, action) => {
@@ -186,10 +199,12 @@ const reducer = (state, action) => {
       const RTRcheck = RTR[0] ? RTR : null;
       const rowToastValue = RTR[0] ? 1000 * RTR.length : null;
       const scoreValue = state.score + rowToastValue + 100;
+      const commifiedScore = commifyScore(scoreValue);
       return {
         ...state,
         rowsToReset: RTRcheck,
         score: scoreValue,
+        commifiedScore: commifiedScore,
         rowToast: rowToastValue
       };
     case "RESET_ROWS":
@@ -249,6 +264,7 @@ const reducer = (state, action) => {
         ...state,
         paused: false
       };
+
     case "SET_ACTIVE_SHAPE":
       const shape = determineShape();
       const orientation = determineOrientation();
@@ -1148,12 +1164,6 @@ const Grid = () => {
     }
   }, [state.shouldGenerateNewShape, state.gameOver]);
 
-  // useEffect(() => {
-  //   if (isMounted.current && state.rowToast) {
-  //     dispatch({ type: "SET_ROW_TOAST" });
-  //   }
-  // }, [state.rowToast]);
-
   useEffect(() => {
     dispatch({
       type: "UPDATE_NEXT_SQUARES",
@@ -1221,7 +1231,7 @@ const Grid = () => {
       <StyledScoreContainer>
         <StyledScoreValueContainer>
           <span>Score:</span>
-          <StyledScoreValue> {state.score}</StyledScoreValue>
+          <StyledScoreValue> {state.commifiedScore}</StyledScoreValue>
         </StyledScoreValueContainer>
         <StyledScore>
           <StyledToast

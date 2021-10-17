@@ -167,6 +167,7 @@ const initialState = {
   shouldGenerateNewShape: false,
   squares: generated,
   keyPressed: false,
+  activeKeyCode: null,
   direction: null,
   score: 0,
   toast: null,
@@ -273,6 +274,11 @@ const reducer = (state, action) => {
         ...state,
         paused: false,
         initial: false
+      };
+    case "SET_ACTIVE_KEYCODE":
+      return {
+        ...state,
+        activeKeyCode: action.payload
       };
     case "SET_ACTIVE_SHAPE":
       const shape = determineShape();
@@ -399,6 +405,7 @@ const reducer = (state, action) => {
         );
         return {
           ...state,
+          activeKeyCode: null,
           keyPressed: true,
           activeCoordinates: manualCoordinates
         };
@@ -1117,6 +1124,11 @@ const reducer = (state, action) => {
         ...state,
         keyPressed: false
       };
+    case "KEYDOWN":
+      return {
+        ...state,
+        keyPressed: true
+      };
     default:
       return {
         ...state
@@ -1130,8 +1142,12 @@ const Grid = () => {
   const theme = useTheme();
 
   const keydownHandler = useCallback(e => {
+    e.preventDefault();
     e.stopImmediatePropagation();
-    if (!state.keyPressed) {
+    if (state.activeKeyCode && e.keyCode !== state.activeKeyCode) {
+      return;
+    } else {
+      dispatch({ type: "SET_ACTIVE_KEYCODE", payload: e.keyCode });
       switch (e.keyCode) {
         case 40: // arrowdown
           return dispatch({ type: "TRIGGER_MANUAL_DOWN" });
@@ -1140,12 +1156,15 @@ const Grid = () => {
         case 37: //arrowleft
           return dispatch({ type: "TRIGGER_MANUAL_LEFT" });
         case 32: // spacebar;
-          return dispatch({ type: "TRIGGER_MANUAL_ROTATE" });
+          if (!e.repeat) {
+            return dispatch({ type: "TRIGGER_MANUAL_ROTATE" });
+          }
       }
     }
   }, []);
 
   const keyupHandler = useCallback(e => {
+    e.preventDefault();
     e.stopImmediatePropagation();
     if (state.keyPressed) {
       dispatch({ type: "KEYUP" });
@@ -1166,7 +1185,7 @@ const Grid = () => {
     }
   };
 
-  const pauseHandler = () => {
+  const pauseHandler = e => {
     state.paused ? dispatch({ type: "START" }) : dispatch({ type: "PAUSE" });
   };
 
@@ -1184,12 +1203,6 @@ const Grid = () => {
   }, [state.togglePlayAgain]);
 
   useEffect(() => {
-    // if (!isMounted.current) {
-    //   dispatch({ type: "SET_ACTIVE_SHAPE" });
-    //   window.addEventListener("keydown", keydownHandler);
-    //   window.addEventListener("keyup", keyupHandler);
-    //   window.addEventListener("resize", checkIfSupported);
-    // } else
     if (state.gameOver) {
       window.removeEventListener("keydown", keydownHandler);
       window.removeEventListener("keyup", keyupHandler);
@@ -1218,7 +1231,6 @@ const Grid = () => {
     } else if (!state.paused) {
       setTimeout(() => {
         dispatch({ type: "SLIDE_COORDINATES" });
-        dispatch({ type: "KEYUP" });
       }, 400);
     }
   }, [state.activeCoordinates, state.paused]);
@@ -1314,7 +1326,7 @@ const Grid = () => {
       ) : (
         <StyledMessageContainer>
           <p>Game is not supported at current screen dimensions.</p>
-          <p> Increase dimensions, or use a larger device to play.</p>
+          <p>Increase dimensions, or use a larger device to play.</p>
         </StyledMessageContainer>
       )}
     </>

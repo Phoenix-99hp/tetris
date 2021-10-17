@@ -15,8 +15,22 @@ const flash = keyframes`
 export const StyledOuter = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-self: start;
   height: fit-content;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
+    order: 3;
+    flex: 1 1 100%;
+    padding-top: 30px;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.last}) {
+    order: 2;
+    padding-bottom: 30px;
+  }
+`;
+
+export const StyledInner = styled.div`
   border: 3px solid ${({ theme }) => theme.colors.gameBorder};
   border-radius: 5px;
 `;
@@ -31,11 +45,30 @@ export const StyledGridContainer = styled.div`
   );
   border-top: 1px solid ${({ theme }) => theme.colors.gridBorder};
   border-left: 1px solid ${({ theme }) => theme.colors.gridBorder};
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+    grid-template-rows: repeat(20, ${({ theme }) => theme.squareSizes.small}px);
+    grid-template-columns: repeat(
+      10,
+      ${({ theme }) => theme.squareSizes.small}px
+    );
+  }
+
+  @media screen and (max-width: ${({ theme }) =>
+      theme.breakpoints.extraSmall}) {
+    grid-template-rows: repeat(
+      20,
+      ${({ theme }) => theme.squareSizes.extraSmall}px
+    );
+    grid-template-columns: repeat(
+      10,
+      ${({ theme }) => theme.squareSizes.extraSmall}px
+    );
+  }
 `;
 
 export const StyledNextShapeContainer = styled.div`
   display: flex;
-  // width: 100%;
   max-width: 300px;
   justify-content: center;
   align-self: flex-start;
@@ -43,7 +76,7 @@ export const StyledNextShapeContainer = styled.div`
   align-items: center;
   padding-left: 10px;
   padding-right: 10px;
-  width: 300px;
+  box-sizing: border-box;
 
   > span {
     display: flex;
@@ -52,6 +85,16 @@ export const StyledNextShapeContainer = styled.div`
     align-items: center;
     justify-content: center;
     padding-bottom: 10px;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+    max-width: 200px;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
+    max-width: 100%;
+    flex: 1 1 50%;
+    order: 1;
   }
 `;
 
@@ -63,6 +106,11 @@ export const StyledNextShape = styled.div`
   width: 200px;
   border: 3px solid ${({ theme }) => theme.colors.white};
   border-radius: 5px;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+    width: 100px;
+    height: 120px;
+  }
 `;
 
 export const StyledNextShapeGrid = styled.div`
@@ -80,13 +128,42 @@ export const StyledNextShapeGrid = styled.div`
       );
     `};
   grid-gap: 1px;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+    ${({ color }) =>
+      color &&
+      css`
+        grid-template-rows: repeat(
+          ${({ shape, theme }) => theme.nextShape[shape].rows},
+          ${({ theme }) => theme.squareSizes.small}px
+        );
+        grid-template-columns: repeat(
+          ${({ shape, theme }) => theme.nextShape[shape].cols},
+          ${({ theme }) => theme.squareSizes.small}px
+        );
+      `};
+  }
+
+  @media screen and (max-width: ${({ theme }) =>
+      theme.breakpoints.extraSmall}) {
+    ${({ color }) =>
+      color &&
+      css`
+        grid-template-rows: repeat(
+          ${({ shape, theme }) => theme.nextShape[shape].rows},
+          ${({ theme }) => theme.squareSizes.extraSmall}px
+        );
+        grid-template-columns: repeat(
+          ${({ shape, theme }) => theme.nextShape[shape].cols},
+          ${({ theme }) => theme.squareSizes.extraSmall}px
+        );
+      `};
+  }
 `;
 
 export const StyledScoreContainer = styled.div`
   display: flex;
   max-width: 300px;
-  // width: 200px;
-  // width: 100%;
   justify-content: center;
   align-self: flex-start;
   flex-wrap: wrap;
@@ -97,7 +174,20 @@ export const StyledScoreContainer = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  // position: relative;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+    max-width: 200px;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
+    max-width: 100%;
+    flex: 1 1 50%;
+    order: 2;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.last}) {
+    order: 3;
+  }
 `;
 
 export const StyledButtonContainer = styled.div`
@@ -124,6 +214,11 @@ export const StyledScore = styled.div`
   width: 200px;
   border: 3px solid ${({ theme }) => theme.colors.white};
   border-radius: 5px;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+    width: 100px;
+    height: 120px;
+  }
 `;
 
 export const StyledToast = styled.div`
@@ -153,29 +248,32 @@ export const StyledScoreValueContainer = styled.div`
   flex: 1 1 100%;
   align-items: center;
   justify-content: center;
-  padding-bottom: 10px;
   height: 40px;
   position: relative;
 
-  > span {
+  > h2 {
     position: relative;
   }
-
-  // width: 200px;
-  // position: absolute;
-  // left: 0;
-  // white-space: nowrap;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
 `;
 
 export const StyledScoreValue = styled.span`
-  font-size: 20px;
+  position: relative;
+  font-size: 30px;
   padding-left: 5px;
   max-width: calc(300px - 70px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  // position: relative;
   color: ${({ theme }) => theme.colors.green};
+`;
+
+export const StyledHeading = styled.h2`
+  font-weight: normal;
+  margin: 0;
+  font-size: 25px;
+
+  @media screen and (max-width: ${({ theme }) =>
+      theme.breakpoints.extraSmall}) {
+    font-size: 20px;
+  }
 `;

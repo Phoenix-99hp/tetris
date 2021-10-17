@@ -9,19 +9,19 @@ export const StyledPageContainer = styled.div`
   width: 100vw;
   background-color: ${({ theme }) => theme.colors.background};
   align-items: center;
-  // padding: 10px;
   box-sizing: border-box;
 `;
 
 export const StyledMainContent = styled.main`
   display: flex;
-  // flex-wrap: wrap;
   width: 100%;
   position: relative;
   justify-content: center;
   align-items: center;
   color: white;
   flex: 1 1 100%;
+  flex-wrap: wrap;
+  align-content: start;
 `;
 
 export const StyledHeader = styled.header`
@@ -32,18 +32,24 @@ export const StyledHeader = styled.header`
   align-items: center;
   width: 100%;
   color: white;
-  padding: 10px 0;
-  font-size: 25px;
+  padding: 40px 0;
+  font-size: 40px;
+  text-shadow: 1px 1px 1px red;
   box-sizing: border-box;
+  color: ${({ theme }) => theme.colors.red};
+
+  > span {
+    border-bottom: 2px solid ${({ theme }) => theme.colors.white};
+  }
 `;
 
-export const StyledFooter = styled.footer`
-  display: flex;
-  flex: 0 1 70px;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  color: white;
-  padding-top: 10px;
-  box-sizing: border-box;
-`;
+// export const StyledFooter = styled.footer`
+//   display: flex;
+//   flex: 0 1 1px;
+//   justify-content: center;
+//   align-items: center;
+//   width: 100%;
+//   box-sizing: border-box;
+// `;
+
+export const StyledLetter = styled.span``;

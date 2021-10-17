@@ -3,15 +3,21 @@ import {
   StyledPageContainer,
   StyledMainContent,
   StyledHeader,
-  StyledFooter
+  StyledLetter,
+  StyledFooter,
 } from "./LayoutStyle";
+import { useTheme } from "styled-components";
 
 const Layout = ({ children }) => {
+  // const theme = useTheme();
+
   return (
     <StyledPageContainer>
-      <StyledHeader>Tokyo Tetris</StyledHeader>
+      <StyledHeader>
+        <span>Tokyo Tetris</span>
+      </StyledHeader>
       <StyledMainContent>{children}</StyledMainContent>
-      <StyledFooter></StyledFooter>
+      {/* <StyledFooter></StyledFooter> */}
     </StyledPageContainer>
   );
 };

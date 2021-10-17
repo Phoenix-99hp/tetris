@@ -1,8 +1,11 @@
 export default {
   totalHeight: {
-    extraSmall: "542.8px",
-    small: "675.4px",
+    // extraSmall: "542.8px",
+    extraSmall: "642.4px",
+    small: "742.8px",
+    // small: "675.4px",
     medium: "775.4px"
+    // test: "742.8px"
   },
   unsupported: {
     minHeight: "530.8",

@@ -16,7 +16,8 @@ import {
   StyledOuter,
   StyledInner,
   StyledGridContainer,
-  StyledUnsupportedContainer
+  StyledMessageContainer,
+  StyledGameOver
 } from "./GridStyle";
 import GridItem from "../GridItem/GridItem.jsx";
 
@@ -168,10 +169,8 @@ const initialState = {
   keyPressed: false,
   direction: null,
   score: 0,
-  rowToast: null,
-  lockToast: 100,
-  showRowToast: false,
-  showLockToast: false,
+  toast: null,
+  showToast: false,
   rowsToReset: null,
   nextShape: {
     shape: nextShape,
@@ -185,7 +184,9 @@ const initialState = {
   },
   paused: true,
   commifiedScore: 0,
-  supported: true
+  supported: true,
+  initial: true,
+  togglePlayAgain: false
 };
 
 const reducer = (state, action) => {
@@ -204,20 +205,26 @@ const reducer = (state, action) => {
         }
       });
       const RTRcheck = RTR[0] ? RTR : null;
-      const rowToastValue = RTR[0] ? 1000 * RTR.length : null;
-      const scoreValue = state.score + rowToastValue + 100;
+      const toastValue = RTR[0] ? 1000 * RTR.length + 100 : 100;
+      const scoreValue = state.score + toastValue;
       const commifiedScore = commifyScore(scoreValue);
       return {
         ...state,
         rowsToReset: RTRcheck,
         score: scoreValue,
         commifiedScore: commifiedScore,
-        rowToast: rowToastValue
+        toast: toastValue
       };
     case "SUPPORTED":
       return {
         ...state,
-        supported: action.payload
+        supported: action.payload.supported,
+        paused: action.payload.paused ? action.payload.paused : state.paused
+      };
+    case "RESET_STATE":
+      return {
+        ...initialState,
+        togglePlayAgain: !state.togglePlayAgain
       };
     case "RESET_ROWS":
       if (state.rowsToReset) {
@@ -246,25 +253,15 @@ const reducer = (state, action) => {
           }
         });
       }
-    case "SET_LOCK_TOAST":
+    case "SET_TOAST":
       return {
         ...state,
-        showLockToast: true
+        showToast: true
       };
-    case "SET_ROW_TOAST":
+    case "HIDE_TOAST":
       return {
         ...state,
-        showRowToast: state.rowToast ? true : false
-      };
-    case "HIDE_LOCK_TOAST":
-      return {
-        ...state,
-        showLockToast: false
-      };
-    case "HIDE_ROW_TOAST":
-      return {
-        ...state,
-        showRowToast: false
+        showToast: false
       };
     case "PAUSE":
       return {
@@ -274,9 +271,9 @@ const reducer = (state, action) => {
     case "START":
       return {
         ...state,
-        paused: false
+        paused: false,
+        initial: false
       };
-
     case "SET_ACTIVE_SHAPE":
       const shape = determineShape();
       const orientation = determineOrientation();
@@ -1160,9 +1157,12 @@ const Grid = () => {
       window.innerWidth >= theme.unsupported.minWidth &&
       window.innerHeight >= theme.unsupported.minHeight
     ) {
-      dispatch({ type: "SUPPORTED", payload: true });
+      dispatch({ type: "SUPPORTED", payload: { supported: true } });
     } else {
-      dispatch({ type: "SUPPORTED", payload: false });
+      dispatch({
+        type: "SUPPORTED",
+        payload: { supported: false, paused: true }
+      });
     }
   };
 
@@ -1170,23 +1170,32 @@ const Grid = () => {
     state.paused ? dispatch({ type: "START" }) : dispatch({ type: "PAUSE" });
   };
 
-  useEffect(() => {
-    checkIfSupported();
-  }, []);
+  const playAgainHandler = () => {
+    isMounted.current = false;
+    dispatch({ type: "RESET_STATE" });
+  };
 
   useEffect(() => {
-    if (!isMounted.current) {
-      dispatch({ type: "SET_ACTIVE_SHAPE" });
-      window.addEventListener("keydown", keydownHandler);
-      window.addEventListener("keyup", keyupHandler);
-      window.addEventListener("resize", checkIfSupported);
-    } else if (state.gameOver) {
+    checkIfSupported();
+    dispatch({ type: "SET_ACTIVE_SHAPE" });
+    window.addEventListener("keydown", keydownHandler);
+    window.addEventListener("keyup", keyupHandler);
+    window.addEventListener("resize", checkIfSupported);
+  }, [state.togglePlayAgain]);
+
+  useEffect(() => {
+    // if (!isMounted.current) {
+    //   dispatch({ type: "SET_ACTIVE_SHAPE" });
+    //   window.addEventListener("keydown", keydownHandler);
+    //   window.addEventListener("keyup", keyupHandler);
+    //   window.addEventListener("resize", checkIfSupported);
+    // } else
+    if (state.gameOver) {
       window.removeEventListener("keydown", keydownHandler);
       window.removeEventListener("keyup", keyupHandler);
     } else if (state.shouldGenerateNewShape) {
       dispatch({ type: "CHECK_FOR_FULL_ROWS" });
-      dispatch({ type: "SET_LOCK_TOAST" });
-      dispatch({ type: "SET_ROW_TOAST" });
+      dispatch({ type: "SET_TOAST" });
       dispatch({ type: "RESET_ROWS" });
       dispatch({ type: "SET_ACTIVE_SHAPE" });
     }
@@ -1209,18 +1218,19 @@ const Grid = () => {
     } else if (!state.paused) {
       setTimeout(() => {
         dispatch({ type: "SLIDE_COORDINATES" });
+        dispatch({ type: "KEYUP" });
       }, 400);
     }
   }, [state.activeCoordinates, state.paused]);
 
   return (
     <>
-      {state.supported ? (
+      {state.supported && !state.gameOver ? (
         <>
           <StyledSideColumn>
             <StyledNextShapeContainer>
               <StyledScoreValueContainer>
-                <StyledHeading>Next Shape</StyledHeading>
+                <StyledHeading first={true}>Next Shape</StyledHeading>
               </StyledScoreValueContainer>
               <StyledNextShape>
                 <StyledNextShapeGrid
@@ -1231,7 +1241,9 @@ const Grid = () => {
                     <GridItem
                       next={true}
                       color={
-                        state.nextSquares.colored.includes(square)
+                        state.initial
+                          ? ""
+                          : state.nextSquares.colored.includes(square)
                           ? theme.colors[state.nextShape.shape.color]
                           : ""
                       }
@@ -1249,7 +1261,9 @@ const Grid = () => {
                   <GridItem
                     row={row}
                     color={
-                      coordinate
+                      state.initial
+                        ? theme.colors.grid
+                        : coordinate
                         ? theme.colors[color]
                         : state.activeCoordinates &&
                           state.activeCoordinates.includes(index)
@@ -1272,18 +1286,10 @@ const Grid = () => {
               </StyledScoreValueContainer>
               <StyledScore>
                 <StyledToast
-                  show={state.showLockToast}
-                  onAnimationEnd={() => dispatch({ type: "HIDE_LOCK_TOAST" })}
+                  show={state.showToast}
+                  onAnimationEnd={() => dispatch({ type: "HIDE_TOAST" })}
                 >
-                  <span>Shape Locked</span>
-                  <StyledToastValue>{`+ ${state.lockToast}`}</StyledToastValue>
-                </StyledToast>
-                <StyledToast
-                  show={state.showRowToast}
-                  onAnimationEnd={() => dispatch({ type: "HIDE_ROW_TOAST" })}
-                >
-                  <span>Row Complete</span>
-                  <StyledToastValue>{`+ ${state.rowToast}`}</StyledToastValue>
+                  <StyledToastValue>{`+ ${state.toast}`}</StyledToastValue>
                 </StyledToast>
               </StyledScore>
               <StyledButtonContainer>
@@ -1294,10 +1300,22 @@ const Grid = () => {
             </StyledScoreContainer>
           </StyledSideColumn>
         </>
+      ) : state.supported && state.gameOver ? (
+        <StyledMessageContainer>
+          <StyledGameOver>Game Over</StyledGameOver>
+          <p>
+            Final Score:
+            <StyledScoreValue>{state.commifiedScore}</StyledScoreValue>
+          </p>
+          <StyledButtonContainer>
+            <button onClick={playAgainHandler}>Play Again</button>
+          </StyledButtonContainer>
+        </StyledMessageContainer>
       ) : (
-        <StyledUnsupportedContainer>
-          Game is not supported at current screen dimensions.
-        </StyledUnsupportedContainer>
+        <StyledMessageContainer>
+          <p>Game is not supported at current screen dimensions.</p>
+          <p> Increase dimensions, or use a larger device to play.</p>
+        </StyledMessageContainer>
       )}
     </>
   );

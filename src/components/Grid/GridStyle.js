@@ -207,7 +207,7 @@ export const StyledButtonContainer = styled.div`
 
   > button {
     height: 25px;
-    width: 75px;
+    width: 85px;
     cursor: pointer;
   }
 `;
@@ -295,6 +295,12 @@ export const StyledHeading = styled.h2`
   margin: 0;
   font-size: 25px;
 
+  ${({ first }) =>
+    first &&
+    css`
+      padding-bottom: 10px;
+    `}
+
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
     font-size: 20px;
   }
@@ -317,7 +323,25 @@ box-sizing: border-box;
   }
 }`;
 
-export const StyledUnsupportedContainer = styled.div`
+export const StyledMessageContainer = styled.div`
   display: flex;
+  justify-content: center;
+  padding: 10px;
+  flex-wrap: wrap;
+  border: 2px solid ${({ theme }) => theme.colors.red};
+  border-radius: 5px;
+  max-width: 300px;
+  > p {
+    flex: 1 1 100%;
+    font-size: 20px;
+  }
+`;
+
+export const StyledGameOverContainer = styled.div`
   border: 2px solid red;
+  display: flex;
+`;
+
+export const StyledGameOver = styled.h2`
+  color: ${({ theme }) => theme.colors.red};
 `;

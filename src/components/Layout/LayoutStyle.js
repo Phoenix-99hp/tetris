@@ -37,9 +37,9 @@ export const StyledHeader = styled.header`
   color: white;
   padding: 40px 0;
   font-size: 40px;
-  text-shadow: 1px 1px 1px red;
+  text-shadow: 1px 1px 1px blue;
   box-sizing: border-box;
-  color: ${({ theme }) => theme.colors.red};
+  color: ${({ theme }) => theme.colors.blue};
 
   > span {
     border-bottom: 2px solid ${({ theme }) => theme.colors.white};

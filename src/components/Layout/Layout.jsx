@@ -1,23 +1,21 @@
 import React from "react";
 import {
   StyledPageContainer,
+  StyledPageInner,
   StyledMainContent,
   StyledHeader,
-  StyledLetter,
-  StyledFooter,
+  StyledLetter
 } from "./LayoutStyle";
-import { useTheme } from "styled-components";
 
 const Layout = ({ children }) => {
-  // const theme = useTheme();
-
   return (
     <StyledPageContainer>
-      <StyledHeader>
-        <span>Tokyo Tetris</span>
-      </StyledHeader>
-      <StyledMainContent>{children}</StyledMainContent>
-      {/* <StyledFooter></StyledFooter> */}
+      <StyledPageInner>
+        <StyledHeader>
+          <span>Tokyo Tetris</span>
+        </StyledHeader>
+        <StyledMainContent>{children}</StyledMainContent>
+      </StyledPageInner>
     </StyledPageContainer>
   );
 };

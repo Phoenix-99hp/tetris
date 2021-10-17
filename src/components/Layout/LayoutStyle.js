@@ -17,11 +17,14 @@ export const StyledMainContent = styled.main`
   width: 100%;
   position: relative;
   justify-content: center;
-  align-items: center;
   color: white;
   flex: 1 1 100%;
-  flex-wrap: wrap;
   align-content: start;
+  padding-bottom: 40px;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
+    flex-wrap: wrap;
+  }
 `;
 
 export const StyledHeader = styled.header`
@@ -41,15 +44,28 @@ export const StyledHeader = styled.header`
   > span {
     border-bottom: 2px solid ${({ theme }) => theme.colors.white};
   }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
+    padding: 30px 0;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.last}) {
+    font-size: 30px;
+  } ;
 `;
 
 // export const StyledFooter = styled.footer`
 //   display: flex;
-//   flex: 0 1 1px;
+//   flex: 0 1 40px;
 //   justify-content: center;
 //   align-items: center;
 //   width: 100%;
 //   box-sizing: border-box;
 // `;
 
-export const StyledLetter = styled.span``;
+export const StyledPageInner = styled.div`
+  max-width: 1200px;
+  width: 100%;
+`;
+
+// export const StyledLetter = styled.span``;

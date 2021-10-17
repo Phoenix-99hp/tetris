@@ -14,19 +14,14 @@ const flash = keyframes`
 
 export const StyledOuter = styled.div`
   display: flex;
+  flex: 1 1 100%;
   justify-content: center;
   align-self: start;
   height: fit-content;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
-    order: 3;
-    flex: 1 1 100%;
-    padding-top: 30px;
-  }
-
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.last}) {
     order: 2;
-    padding-bottom: 30px;
+    padding-top: 30px;
   }
 `;
 
@@ -46,7 +41,8 @@ export const StyledGridContainer = styled.div`
   border-top: 1px solid ${({ theme }) => theme.colors.gridBorder};
   border-left: 1px solid ${({ theme }) => theme.colors.gridBorder};
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+  @media screen and (max-height: ${({ theme }) => theme.totalHeight.medium}),
+    screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
     grid-template-rows: repeat(20, ${({ theme }) => theme.squareSizes.small}px);
     grid-template-columns: repeat(
       10,
@@ -54,8 +50,7 @@ export const StyledGridContainer = styled.div`
     );
   }
 
-  @media screen and (max-width: ${({ theme }) =>
-      theme.breakpoints.extraSmall}) {
+  @media screen and (max-height: ${({ theme }) => theme.totalHeight.small}) {
     grid-template-rows: repeat(
       20,
       ${({ theme }) => theme.squareSizes.extraSmall}px
@@ -63,6 +58,16 @@ export const StyledGridContainer = styled.div`
     grid-template-columns: repeat(
       10,
       ${({ theme }) => theme.squareSizes.extraSmall}px
+    );
+  }
+
+  @media screen and (max-height: ${({ theme }) =>
+      theme.totalHeight.extraSmall}),
+    screen and (max-width: ${({ theme }) => theme.breakpoints.extraSmall}) {
+    grid-template-rows: repeat(20, ${({ theme }) => theme.squareSizes.last}px);
+    grid-template-columns: repeat(
+      10,
+      ${({ theme }) => theme.squareSizes.last}px
     );
   }
 `;
@@ -74,8 +79,6 @@ export const StyledNextShapeContainer = styled.div`
   align-self: flex-start;
   flex-wrap: wrap;
   align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
   box-sizing: border-box;
 
   > span {
@@ -92,9 +95,7 @@ export const StyledNextShapeContainer = styled.div`
   }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
-    max-width: 100%;
-    flex: 1 1 50%;
-    order: 1;
+    display: none;
   }
 `;
 
@@ -129,7 +130,8 @@ export const StyledNextShapeGrid = styled.div`
     `};
   grid-gap: 1px;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}),
+    screen and (max-height: ${({ theme }) => theme.totalHeight.medium}), {
     ${({ color }) =>
       color &&
       css`
@@ -144,8 +146,7 @@ export const StyledNextShapeGrid = styled.div`
       `};
   }
 
-  @media screen and (max-width: ${({ theme }) =>
-      theme.breakpoints.extraSmall}) {
+  @media screen and (max-height: ${({ theme }) => theme.totalHeight.small}), {
     ${({ color }) =>
       color &&
       css`
@@ -156,6 +157,22 @@ export const StyledNextShapeGrid = styled.div`
         grid-template-columns: repeat(
           ${({ shape, theme }) => theme.nextShape[shape].cols},
           ${({ theme }) => theme.squareSizes.extraSmall}px
+        );
+      `};
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.extraSmall}),
+    screen and (max-height: ${({ theme }) => theme.totalHeight.extraSmall}), {
+    ${({ color }) =>
+      color &&
+      css`
+        grid-template-rows: repeat(
+          ${({ shape, theme }) => theme.nextShape[shape].rows},
+          ${({ theme }) => theme.squareSizes.last}px
+        );
+        grid-template-columns: repeat(
+          ${({ shape, theme }) => theme.nextShape[shape].cols},
+          ${({ theme }) => theme.squareSizes.last}px
         );
       `};
   }
@@ -168,25 +185,15 @@ export const StyledScoreContainer = styled.div`
   align-self: flex-start;
   flex-wrap: wrap;
   align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
   box-sizing: border-box;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
-    max-width: 200px;
-  }
-
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
-    max-width: 100%;
-    flex: 1 1 50%;
-    order: 2;
+    // max-width: 200px;
+    flex: 1 1 100%;
   }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.last}) {
-    order: 3;
+    order: 1;
   }
 `;
 
@@ -212,12 +219,16 @@ export const StyledScore = styled.div`
   flex-wrap: wrap;
   height: 150px;
   width: 200px;
-  border: 3px solid ${({ theme }) => theme.colors.white};
+  // border: 3px solid ${({ theme }) => theme.colors.white};
   border-radius: 5px;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
     width: 100px;
     height: 120px;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
+    display: none;
   }
 `;
 
@@ -244,7 +255,7 @@ export const StyledToastValue = styled.span`
 
 export const StyledScoreValueContainer = styled.div`
   display: flex;
-  max-width: 300px;
+  // max-width: 300px;
   flex: 1 1 100%;
   align-items: center;
   justify-content: center;
@@ -254,17 +265,29 @@ export const StyledScoreValueContainer = styled.div`
   > h2 {
     position: relative;
   }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+    // max-width: 200px;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+    height: fit-content;
+  }
 `;
 
 export const StyledScoreValue = styled.span`
   position: relative;
-  font-size: 30px;
+  font-size: 25px;
   padding-left: 5px;
   max-width: calc(300px - 70px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   color: ${({ theme }) => theme.colors.green};
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+    font-size: 20px;
+  }
 `;
 
 export const StyledHeading = styled.h2`
@@ -272,8 +295,29 @@ export const StyledHeading = styled.h2`
   margin: 0;
   font-size: 25px;
 
-  @media screen and (max-width: ${({ theme }) =>
-      theme.breakpoints.extraSmall}) {
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
     font-size: 20px;
   }
+`;
+
+export const StyledSideColumn = styled.div`
+display: flex;
+justify-content: center;
+flex 1 1 100%;
+padding: 10px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+box-sizing: border-box;
+
+@media screen and (max-width: ${({ theme }) => theme.breakpoints.small}){
+  padding: 0 10px;
+  :nth-of-type(1) {
+    display: none;
+  }
+}`;
+
+export const StyledUnsupportedContainer = styled.div`
+  display: flex;
+  border: 2px solid red;
 `;

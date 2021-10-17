@@ -4,6 +4,7 @@ import {
   StyledNextShapeContainer,
   StyledNextShape,
   StyledNextShapeGrid,
+  StyledSideColumn,
   StyledScoreContainer,
   StyledButtonContainer,
   StyledScore,
@@ -15,6 +16,7 @@ import {
   StyledOuter,
   StyledInner,
   StyledGridContainer,
+  StyledUnsupportedContainer
 } from "./GridStyle";
 import GridItem from "../GridItem/GridItem.jsx";
 
@@ -31,13 +33,13 @@ const generateSquares = () => {
       generated.push({
         edge: "left",
         row: currentRow,
-        coordinate: null,
+        coordinate: null
       });
     } else if (i.toString().endsWith("9")) {
       generated.push({
         edge: "right",
         row: currentRow,
-        coordinate: null,
+        coordinate: null
       });
     } else {
       generated.push({ row: currentRow, coordinate: null });
@@ -175,14 +177,15 @@ const initialState = {
     shape: nextShape,
     orientation: nextOrientation,
     coordinates: nextCoordinates,
-    direction: nextDirection,
+    direction: nextDirection
   },
   nextSquares: {
     total: [],
-    colored: [],
+    colored: []
   },
   paused: true,
   commifiedScore: 0,
+  supported: true
 };
 
 const reducer = (state, action) => {
@@ -209,7 +212,12 @@ const reducer = (state, action) => {
         rowsToReset: RTRcheck,
         score: scoreValue,
         commifiedScore: commifiedScore,
-        rowToast: rowToastValue,
+        rowToast: rowToastValue
+      };
+    case "SUPPORTED":
+      return {
+        ...state,
+        supported: action.payload
       };
     case "RESET_ROWS":
       if (state.rowsToReset) {
@@ -219,7 +227,7 @@ const reducer = (state, action) => {
               state.squares.splice(state.squares.indexOf(square), 1, {
                 ...square,
                 color: "red",
-                coordinate: null,
+                coordinate: null
               });
             }
           });
@@ -232,7 +240,7 @@ const reducer = (state, action) => {
                 row: state.squares[i].row + 1,
                 coordinate: state.squares[i].coordinate
                   ? state.squares[i].coordinate + 10
-                  : null,
+                  : null
               });
             }
           }
@@ -241,32 +249,32 @@ const reducer = (state, action) => {
     case "SET_LOCK_TOAST":
       return {
         ...state,
-        showLockToast: true,
+        showLockToast: true
       };
     case "SET_ROW_TOAST":
       return {
         ...state,
-        showRowToast: state.rowToast ? true : false,
+        showRowToast: state.rowToast ? true : false
       };
     case "HIDE_LOCK_TOAST":
       return {
         ...state,
-        showLockToast: false,
+        showLockToast: false
       };
     case "HIDE_ROW_TOAST":
       return {
         ...state,
-        showRowToast: false,
+        showRowToast: false
       };
     case "PAUSE":
       return {
         ...state,
-        paused: true,
+        paused: true
       };
     case "START":
       return {
         ...state,
-        paused: false,
+        paused: false
       };
 
     case "SET_ACTIVE_SHAPE":
@@ -309,7 +317,7 @@ const reducer = (state, action) => {
         //   });
         return {
           ...state,
-          gameOver: true,
+          gameOver: true
         };
       } else if (state.nextShape.shape.color) {
         return {
@@ -324,8 +332,8 @@ const reducer = (state, action) => {
             shape: shape,
             orientation: orientation,
             coordinates: coordinates,
-            direction: direction,
-          },
+            direction: direction
+          }
         };
       }
     case "UPDATE_NEXT_SQUARES":
@@ -338,14 +346,14 @@ const reducer = (state, action) => {
         1: [0, 1, 2, 3],
         2: [0, 2, 4, 5],
         3: [0, 1, 4, 5],
-        4: [1, 3, 4, 5],
+        4: [1, 3, 4, 5]
       };
       return {
         ...state,
         nextSquares: {
           total: newSquares,
-          colored: coloredCoordinates[state.nextShape.shape.num],
-        },
+          colored: coloredCoordinates[state.nextShape.shape.num]
+        }
       };
     case "SLIDE_COORDINATES":
       if (
@@ -360,7 +368,7 @@ const reducer = (state, action) => {
         return {
           ...state,
           keyPressed: false,
-          activeCoordinates: newSlideCoordinates,
+          activeCoordinates: newSlideCoordinates
         };
       } else {
         return {
@@ -370,18 +378,18 @@ const reducer = (state, action) => {
               ? {
                   ...square,
                   coordinate: i,
-                  color: state.activeShape.color,
+                  color: state.activeShape.color
                 }
               : { ...square }
           ),
           shouldGenerateNewShape: true,
-          keyPressed: false,
+          keyPressed: false
         };
       }
     case "TRIGGER_MANUAL_DOWN":
       if (state.paused) {
         return {
-          ...state,
+          ...state
         };
       } else if (
         !state.activeCoordinates.filter(
@@ -395,7 +403,7 @@ const reducer = (state, action) => {
         return {
           ...state,
           keyPressed: true,
-          activeCoordinates: manualCoordinates,
+          activeCoordinates: manualCoordinates
         };
       } else {
         return {
@@ -405,18 +413,18 @@ const reducer = (state, action) => {
               ? {
                   ...square,
                   coordinate: i,
-                  color: state.activeShape.color,
+                  color: state.activeShape.color
                 }
               : { ...square }
           ),
           shouldGenerateNewShape: true,
-          keyPressed: true,
+          keyPressed: true
         };
       }
     case "TRIGGER_MANUAL_RIGHT":
       if (state.paused) {
         return {
-          ...state,
+          ...state
         };
       } else if (
         state.activeCoordinates.filter(coordinate => coordinate > 189)[0]
@@ -428,12 +436,12 @@ const reducer = (state, action) => {
               ? {
                   ...square,
                   coordinate: i,
-                  color: state.activeShape.color,
+                  color: state.activeShape.color
                 }
               : { ...square }
           ),
           shouldGenerateNewShape: true,
-          keyPressed: true,
+          keyPressed: true
         };
       } else if (
         !state.activeCoordinates.filter(
@@ -448,18 +456,18 @@ const reducer = (state, action) => {
         return {
           ...state,
           keyPressed: true,
-          activeCoordinates: rightCoordinates,
+          activeCoordinates: rightCoordinates
         };
       } else {
         return {
           ...state,
-          keyPressed: true,
+          keyPressed: true
         };
       }
     case "TRIGGER_MANUAL_LEFT":
       if (state.paused) {
         return {
-          ...state,
+          ...state
         };
       } else if (
         state.activeCoordinates.filter(coordinate => coordinate > 189)[0]
@@ -471,12 +479,12 @@ const reducer = (state, action) => {
               ? {
                   ...square,
                   coordinate: i,
-                  color: state.activeShape.color,
+                  color: state.activeShape.color
                 }
               : { ...square }
           ),
           shouldGenerateNewShape: true,
-          keyPressed: true,
+          keyPressed: true
         };
       } else if (
         !state.activeCoordinates.filter(
@@ -491,18 +499,18 @@ const reducer = (state, action) => {
         return {
           ...state,
           keyPressed: true,
-          activeCoordinates: leftCoordinates,
+          activeCoordinates: leftCoordinates
         };
       } else {
         return {
           ...state,
-          keyPressed: true,
+          keyPressed: true
         };
       }
     case "TRIGGER_MANUAL_ROTATE":
       if (state.paused) {
         return {
-          ...state,
+          ...state
         };
       } else if (
         state.activeCoordinates.filter(coordinate => coordinate > 189)[0]
@@ -514,12 +522,12 @@ const reducer = (state, action) => {
               ? {
                   ...square,
                   coordinate: i,
-                  color: state.activeShape.color,
+                  color: state.activeShape.color
                 }
               : { ...square }
           ),
           shouldGenerateNewShape: true,
-          keyPressed: true,
+          keyPressed: true
         };
       } else if (state.activeShape.num === 1) {
         if (state.activeOrientation === 0 || state.activeOrientation === 2) {
@@ -551,7 +559,7 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates,
+              : state.activeCoordinates
           };
         } else {
           let sortedNewCoordinates = state.activeCoordinates
@@ -582,7 +590,7 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 0 : 1,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates,
+              : state.activeCoordinates
           };
         }
       } else if (state.activeShape.num === 2) {
@@ -616,7 +624,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           } else if (state.activeOrientation === 1) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -647,7 +655,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 2 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           } else if (state.activeOrientation === 2) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -678,7 +686,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 3 : 2,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           } else if (state.activeOrientation === 3) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -709,7 +717,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 3,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           }
         } else {
@@ -742,7 +750,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           } else if (state.activeOrientation === 1) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -773,7 +781,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 2 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           } else if (state.activeOrientation === 2) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -804,7 +812,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 3 : 2,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           } else if (state.activeOrientation === 3) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -835,7 +843,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 3,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           }
         }
@@ -870,7 +878,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           } else if (
             state.activeOrientation === 1 ||
@@ -904,7 +912,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           }
         } else {
@@ -937,7 +945,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           } else if (
             state.activeOrientation === 1 ||
@@ -971,7 +979,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates,
+                : state.activeCoordinates
             };
           }
         }
@@ -1005,7 +1013,7 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates,
+              : state.activeCoordinates
           };
         } else if (state.activeOrientation === 1) {
           let sortedNewCoordinates = state.activeCoordinates
@@ -1036,7 +1044,7 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 2 : 1,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates,
+              : state.activeCoordinates
           };
         } else if (state.activeOrientation === 2) {
           let sortedNewCoordinates = state.activeCoordinates
@@ -1067,7 +1075,7 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 3 : 2,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates,
+              : state.activeCoordinates
           };
         } else if (state.activeOrientation === 3) {
           let sortedNewCoordinates = state.activeCoordinates
@@ -1098,23 +1106,23 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 0 : 3,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates,
+              : state.activeCoordinates
           };
         }
       } else {
         return {
           ...state,
-          keyPressed: true,
+          keyPressed: true
         };
       }
     case "KEYUP":
       return {
         ...state,
-        keyPressed: false,
+        keyPressed: false
       };
     default:
       return {
-        ...state,
+        ...state
       };
   }
 };
@@ -1147,15 +1155,31 @@ const Grid = () => {
     }
   }, []);
 
+  const checkIfSupported = () => {
+    if (
+      window.innerWidth >= theme.unsupported.minWidth &&
+      window.innerHeight >= theme.unsupported.minHeight
+    ) {
+      dispatch({ type: "SUPPORTED", payload: true });
+    } else {
+      dispatch({ type: "SUPPORTED", payload: false });
+    }
+  };
+
   const pauseHandler = () => {
     state.paused ? dispatch({ type: "START" }) : dispatch({ type: "PAUSE" });
   };
+
+  useEffect(() => {
+    checkIfSupported();
+  }, []);
 
   useEffect(() => {
     if (!isMounted.current) {
       dispatch({ type: "SET_ACTIVE_SHAPE" });
       window.addEventListener("keydown", keydownHandler);
       window.addEventListener("keyup", keyupHandler);
+      window.addEventListener("resize", checkIfSupported);
     } else if (state.gameOver) {
       window.removeEventListener("keydown", keydownHandler);
       window.removeEventListener("keyup", keyupHandler);
@@ -1173,7 +1197,7 @@ const Grid = () => {
       type: "UPDATE_NEXT_SQUARES",
       payload:
         theme.nextShape[state.nextShape.shape.num].rows *
-        theme.nextShape[state.nextShape.shape.num].cols,
+        theme.nextShape[state.nextShape.shape.num].cols
     });
   }, [state.nextShape]);
 
@@ -1191,78 +1215,90 @@ const Grid = () => {
 
   return (
     <>
-      <StyledNextShapeContainer>
-        <StyledScoreValueContainer>
-          <StyledHeading>Next Shape</StyledHeading>
-        </StyledScoreValueContainer>
-        <StyledNextShape>
-          <StyledNextShapeGrid
-            color={state.nextShape.shape.color}
-            shape={state.nextShape.shape.num}
-          >
-            {state.nextSquares.total.map(square => (
-              <GridItem
-                next={true}
-                color={
-                  state.nextSquares.colored.includes(square)
-                    ? theme.colors[state.nextShape.shape.color]
-                    : ""
-                }
-                key={square}
-              />
-            ))}
-          </StyledNextShapeGrid>
-        </StyledNextShape>
-      </StyledNextShapeContainer>
-      <StyledOuter>
-        <StyledInner>
-          <StyledGridContainer>
-            {state.squares.map(({ coordinate, color, row }, index) => (
-              <GridItem
-                row={row}
-                color={
-                  coordinate
-                    ? theme.colors[color]
-                    : state.activeCoordinates &&
-                      state.activeCoordinates.includes(index)
-                    ? theme.colors[state.activeShape.color]
-                    : color
-                    ? color
-                    : theme.colors.grid
-                }
-                key={index}
-              />
-            ))}
-          </StyledGridContainer>
-        </StyledInner>
-      </StyledOuter>
-      <StyledScoreContainer>
-        <StyledScoreValueContainer>
-          <StyledHeading>Score:</StyledHeading>
-          <StyledScoreValue> {state.commifiedScore}</StyledScoreValue>
-        </StyledScoreValueContainer>
-        <StyledScore>
-          <StyledToast
-            show={state.showLockToast}
-            onAnimationEnd={() => dispatch({ type: "HIDE_LOCK_TOAST" })}
-          >
-            <span>Shape Locked</span>
-            <StyledToastValue>{`+ ${state.lockToast}`}</StyledToastValue>
-          </StyledToast>
-          <StyledToast
-            show={state.showRowToast}
-            onAnimationEnd={() => dispatch({ type: "HIDE_ROW_TOAST" })}
-          >
-            <span>Row Complete</span>
-            <StyledToastValue>{`+ ${state.rowToast}`}</StyledToastValue>
-          </StyledToast>
-        </StyledScore>
-        <StyledButtonContainer>
-          <button onClick={pauseHandler}>
-            {state.paused ? "Start" : "Pause"}
-          </button>
-        </StyledButtonContainer>
-      </StyledScoreContainer>
+      {state.supported ? (
+        <>
+          <StyledSideColumn>
+            <StyledNextShapeContainer>
+              <StyledScoreValueContainer>
+                <StyledHeading>Next Shape</StyledHeading>
+              </StyledScoreValueContainer>
+              <StyledNextShape>
+                <StyledNextShapeGrid
+                  color={state.nextShape.shape.color}
+                  shape={state.nextShape.shape.num}
+                >
+                  {state.nextSquares.total.map(square => (
+                    <GridItem
+                      next={true}
+                      color={
+                        state.nextSquares.colored.includes(square)
+                          ? theme.colors[state.nextShape.shape.color]
+                          : ""
+                      }
+                      key={square}
+                    />
+                  ))}
+                </StyledNextShapeGrid>
+              </StyledNextShape>
+            </StyledNextShapeContainer>
+          </StyledSideColumn>
+          <StyledOuter>
+            <StyledInner>
+              <StyledGridContainer>
+                {state.squares.map(({ coordinate, color, row }, index) => (
+                  <GridItem
+                    row={row}
+                    color={
+                      coordinate
+                        ? theme.colors[color]
+                        : state.activeCoordinates &&
+                          state.activeCoordinates.includes(index)
+                        ? theme.colors[state.activeShape.color]
+                        : color
+                        ? color
+                        : theme.colors.grid
+                    }
+                    key={index}
+                  />
+                ))}
+              </StyledGridContainer>
+            </StyledInner>
+          </StyledOuter>
+          <StyledSideColumn>
+            <StyledScoreContainer>
+              <StyledScoreValueContainer>
+                <StyledHeading>Score:</StyledHeading>
+                <StyledScoreValue> {state.commifiedScore}</StyledScoreValue>
+              </StyledScoreValueContainer>
+              <StyledScore>
+                <StyledToast
+                  show={state.showLockToast}
+                  onAnimationEnd={() => dispatch({ type: "HIDE_LOCK_TOAST" })}
+                >
+                  <span>Shape Locked</span>
+                  <StyledToastValue>{`+ ${state.lockToast}`}</StyledToastValue>
+                </StyledToast>
+                <StyledToast
+                  show={state.showRowToast}
+                  onAnimationEnd={() => dispatch({ type: "HIDE_ROW_TOAST" })}
+                >
+                  <span>Row Complete</span>
+                  <StyledToastValue>{`+ ${state.rowToast}`}</StyledToastValue>
+                </StyledToast>
+              </StyledScore>
+              <StyledButtonContainer>
+                <button onClick={pauseHandler}>
+                  {state.paused ? "Start" : "Pause"}
+                </button>
+              </StyledButtonContainer>
+            </StyledScoreContainer>
+          </StyledSideColumn>
+        </>
+      ) : (
+        <StyledUnsupportedContainer>
+          Game is not supported at current screen dimensions.
+        </StyledUnsupportedContainer>
+      )}
     </>
   );
 };

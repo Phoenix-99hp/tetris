@@ -9,7 +9,8 @@ body {
   width: 100%;
   margin: 0;
   box-sizing: border-box;
-  overflow: auto;
+  overflow-x: hidden;
+  padding: 0;
 }
 `;
 

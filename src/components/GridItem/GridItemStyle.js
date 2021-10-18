@@ -5,9 +5,16 @@ export const StyledGridSquare = styled.div`
   background-color: ${({ color }) => color};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gridBorder};
   border-right: 1px solid ${({ theme }) => theme.colors.gridBorder};
-  ${({ next }) =>
-    next &&
+  ${({ border }) =>
+    border &&
     css`
-      border: none;
-    `};
+      border-top: ${({ border }) =>
+        border.squares.top ? border.squares.top : "none"};
+      border-left: ${({ border }) =>
+        border.squares.left ? border.squares.left : "none"};
+      border-right: ${({ border }) =>
+        border.squares.right ? border.squares.right : "none"};
+      border-bottom: ${({ border }) =>
+        border.squares.bottom ? border.squares.bottom : "none"};
+    `}
 `;

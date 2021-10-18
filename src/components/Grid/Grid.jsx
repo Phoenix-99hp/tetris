@@ -8,7 +8,7 @@ import {
   StyledScoreContainer,
   StyledButtonContainer,
   StyledScore,
-  StyledHeading,
+  // StyledHeading,
   StyledScoreValueContainer,
   StyledScoreValue,
   StyledToast,
@@ -17,7 +17,8 @@ import {
   StyledInner,
   StyledGridContainer,
   StyledMessageContainer,
-  StyledGameOver
+  StyledGameOver,
+  StyledFinalScoreHeading
 } from "./GridStyle";
 import GridItem from "../GridItem/GridItem.jsx";
 
@@ -421,6 +422,7 @@ const reducer = (state, action) => {
                 }
               : { ...square }
           ),
+          activeKeyCode: null,
           shouldGenerateNewShape: true,
           keyPressed: true
         };
@@ -445,7 +447,8 @@ const reducer = (state, action) => {
               : { ...square }
           ),
           shouldGenerateNewShape: true,
-          keyPressed: true
+          keyPressed: true,
+          activeKeyCode: null
         };
       } else if (
         !state.activeCoordinates.filter(
@@ -460,18 +463,21 @@ const reducer = (state, action) => {
         return {
           ...state,
           keyPressed: true,
-          activeCoordinates: rightCoordinates
+          activeCoordinates: rightCoordinates,
+          activeKeyCode: null
         };
       } else {
         return {
           ...state,
-          keyPressed: true
+          keyPressed: true,
+          activeKeyCode: null
         };
       }
     case "TRIGGER_MANUAL_LEFT":
       if (state.paused) {
         return {
-          ...state
+          ...state,
+          activeKeyCode: null
         };
       } else if (
         state.activeCoordinates.filter(coordinate => coordinate > 189)[0]
@@ -488,7 +494,8 @@ const reducer = (state, action) => {
               : { ...square }
           ),
           shouldGenerateNewShape: true,
-          keyPressed: true
+          keyPressed: true,
+          activeKeyCode: null
         };
       } else if (
         !state.activeCoordinates.filter(
@@ -503,12 +510,14 @@ const reducer = (state, action) => {
         return {
           ...state,
           keyPressed: true,
-          activeCoordinates: leftCoordinates
+          activeCoordinates: leftCoordinates,
+          activeKeyCode: null
         };
       } else {
         return {
           ...state,
-          keyPressed: true
+          keyPressed: true,
+          activeKeyCode: null
         };
       }
     case "TRIGGER_MANUAL_ROTATE":
@@ -531,7 +540,8 @@ const reducer = (state, action) => {
               : { ...square }
           ),
           shouldGenerateNewShape: true,
-          keyPressed: true
+          keyPressed: true,
+          activeKeyCode: null
         };
       } else if (state.activeShape.num === 1) {
         if (state.activeOrientation === 0 || state.activeOrientation === 2) {
@@ -560,6 +570,7 @@ const reducer = (state, action) => {
           return {
             ...state,
             keyPressed: true,
+            activeKeyCode: null,
             activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
@@ -590,6 +601,7 @@ const reducer = (state, action) => {
             : false;
           return {
             ...state,
+            activeKeyCode: null,
             keyPressed: true,
             activeOrientation: shouldUpdateToNewCoordinates ? 0 : 1,
             activeCoordinates: shouldUpdateToNewCoordinates
@@ -625,6 +637,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -656,6 +669,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 2 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -687,6 +701,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 3 : 2,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -718,6 +733,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 3,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -751,6 +767,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -782,6 +799,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 2 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -813,6 +831,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 3 : 2,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -844,6 +863,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 3,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -879,6 +899,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -913,6 +934,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -946,6 +968,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -980,6 +1003,7 @@ const reducer = (state, action) => {
             return {
               ...state,
               keyPressed: true,
+              activeKeyCode: null,
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
@@ -1014,6 +1038,7 @@ const reducer = (state, action) => {
           return {
             ...state,
             keyPressed: true,
+            activeKeyCode: null,
             activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
@@ -1045,6 +1070,7 @@ const reducer = (state, action) => {
           return {
             ...state,
             keyPressed: true,
+            activeKeyCode: null,
             activeOrientation: shouldUpdateToNewCoordinates ? 2 : 1,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
@@ -1076,6 +1102,7 @@ const reducer = (state, action) => {
           return {
             ...state,
             keyPressed: true,
+            activeKeyCode: null,
             activeOrientation: shouldUpdateToNewCoordinates ? 3 : 2,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
@@ -1107,6 +1134,7 @@ const reducer = (state, action) => {
           return {
             ...state,
             keyPressed: true,
+            activeKeyCode: null,
             activeOrientation: shouldUpdateToNewCoordinates ? 0 : 3,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
@@ -1116,7 +1144,8 @@ const reducer = (state, action) => {
       } else {
         return {
           ...state,
-          keyPressed: true
+          keyPressed: true,
+          activeKeyCode: null
         };
       }
     case "KEYUP":
@@ -1144,7 +1173,11 @@ const Grid = () => {
   const keydownHandler = useCallback(e => {
     e.preventDefault();
     e.stopImmediatePropagation();
-    if (state.activeKeyCode && e.keyCode !== state.activeKeyCode) {
+    if (
+      // state.keyPressed ||
+      state.activeKeyCode &&
+      e.keyCode !== state.activeKeyCode
+    ) {
       return;
     } else {
       dispatch({ type: "SET_ACTIVE_KEYCODE", payload: e.keyCode });
@@ -1242,7 +1275,7 @@ const Grid = () => {
           <StyledSideColumn>
             <StyledNextShapeContainer>
               <StyledScoreValueContainer>
-                <StyledHeading first={true}>Next Shape</StyledHeading>
+                <h2>Next Shape</h2>
               </StyledScoreValueContainer>
               <StyledNextShape>
                 <StyledNextShapeGrid
@@ -1251,7 +1284,7 @@ const Grid = () => {
                 >
                   {state.nextSquares.total.map(square => (
                     <GridItem
-                      next={true}
+                      border={theme.nextShape[state.nextShape.shape.num].border}
                       color={
                         state.initial
                           ? ""
@@ -1293,7 +1326,7 @@ const Grid = () => {
           <StyledSideColumn>
             <StyledScoreContainer>
               <StyledScoreValueContainer>
-                <StyledHeading>Score:</StyledHeading>
+                <h2>Score:</h2>
                 <StyledScoreValue> {state.commifiedScore}</StyledScoreValue>
               </StyledScoreValueContainer>
               <StyledScore>
@@ -1315,10 +1348,10 @@ const Grid = () => {
       ) : state.supported && state.gameOver ? (
         <StyledMessageContainer>
           <StyledGameOver>Game Over</StyledGameOver>
-          <p>
+          <StyledFinalScoreHeading>
             Final Score:
             <StyledScoreValue>{state.commifiedScore}</StyledScoreValue>
-          </p>
+          </StyledFinalScoreHeading>
           <StyledButtonContainer>
             <button onClick={playAgainHandler}>Play Again</button>
           </StyledButtonContainer>

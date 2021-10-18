@@ -1,11 +1,8 @@
 export default {
   totalHeight: {
-    // extraSmall: "542.8px",
-    extraSmall: "642.4px",
-    small: "742.8px",
-    // small: "675.4px",
+    extraSmall: "645.2px",
+    small: "745.2px",
     medium: "775.4px"
-    // test: "742.8px"
   },
   unsupported: {
     minHeight: "530.8",
@@ -27,6 +24,7 @@ export default {
     last: "253px",
     extraSmall: "400px",
     small: "660px",
+    mediumSmall: "720px",
     medium: "1000px",
     large: "1400px"
   },
@@ -40,23 +38,88 @@ export default {
   nextShape: {
     0: {
       rows: 2,
-      cols: 2
+      cols: 2,
+      border: {
+        squares: {
+          top: "false",
+          right: "false",
+          left: "false",
+          bottom: true
+        },
+        grid: {
+          top: "false",
+          right: "false",
+          left: "false",
+          bottom: "false"
+        }
+      }
     },
     1: {
       rows: 4,
-      cols: 1
+      cols: 1,
+      border: {
+        squares: {
+          top: "false",
+          right: "false",
+          left: "false",
+          bottom: true
+        },
+        grid: "false"
+      }
     },
     2: {
       rows: 3,
-      cols: 2
+      cols: 2,
+      border: {
+        grid: {
+          top: "false",
+          right: "false",
+          left: true,
+          bottom: true
+        },
+        squares: {
+          bottom: "false",
+          right: "false",
+          left: "false",
+          top: true
+        }
+      }
     },
     3: {
       rows: 2,
-      cols: 3
+      cols: 3,
+      border: {
+        grid: {
+          bottom: "false",
+          right: "false",
+          left: "false",
+          top: "false"
+        },
+        squares: {
+          bottom: "false",
+          right: "false",
+          left: "false",
+          top: "false"
+        }
+      }
     },
     4: {
       rows: 2,
-      cols: 3
+      cols: 3,
+      border: {
+        grid: {
+          bottom: "false",
+          right: "false",
+          left: "false",
+          top: "false"
+        },
+        squares: {
+          bottom: "false",
+          right: "false",
+          left: "false",
+          top: "false"
+        }
+      }
     }
   }
 };

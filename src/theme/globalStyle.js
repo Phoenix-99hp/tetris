@@ -11,6 +11,15 @@ body {
   box-sizing: border-box;
   overflow-x: hidden;
   padding: 0;
+    font-family: GeoramaLight;
+}
+button {
+  font-family: GeoramaLightItalic;
+}
+h2 {
+  font-weight: normal;
+  margin: 0;
+  font-size: 20px;
 }
 `;
 

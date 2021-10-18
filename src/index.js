@@ -4,6 +4,7 @@ import App from "./App";
 import Theme from "./theme/theme";
 import { ThemeProvider } from "styled-components";
 import GlobalStyle from "./theme/globalStyle";
+import "./theme/globalFonts.css";
 
 ReactDOM.render(
   <ThemeProvider theme={Theme}>

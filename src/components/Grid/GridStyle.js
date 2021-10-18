@@ -84,7 +84,7 @@ export const StyledNextShapeContainer = styled.div`
   > span {
     display: flex;
     flex: 1 1 100%;
-    height: 40px;
+    // height: 40px;
     align-items: center;
     justify-content: center;
     padding-bottom: 10px;
@@ -103,6 +103,7 @@ export const StyledNextShape = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
   height: 150px;
   width: 200px;
   border: 3px solid ${({ theme }) => theme.colors.white};
@@ -116,6 +117,26 @@ export const StyledNextShape = styled.div`
 
 export const StyledNextShapeGrid = styled.div`
   display: grid;
+  ${({ shape }) =>
+    shape &&
+    css`
+    border-top: ${({ theme, shape }) =>
+      theme.nextShape[shape].border.grid.top
+        ? `1px solid ${theme.colors.gridBorder}`
+        : "none"}
+    border-bottom:${({ theme, shape }) =>
+      theme.nextShape[shape].border.grid.bottom
+        ? `1px solid ${theme.colors.gridBorder}`
+        : "none"}
+    border-left:${({ theme, shape }) =>
+      theme.nextShape[shape].border.grid.left
+        ? `1px solid ${theme.colors.gridBorder}`
+        : "none"}
+    border-right:${({ theme, shape }) =>
+      theme.nextShape[shape].border.grid.right
+        ? `1px solid ${theme.colors.gridBorder}`
+        : "none"}
+  `}
   ${({ color }) =>
     color &&
     css`
@@ -128,7 +149,6 @@ export const StyledNextShapeGrid = styled.div`
         ${({ theme }) => theme.squareSizes.medium}px
       );
     `};
-  grid-gap: 1px;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}),
     screen and (max-height: ${({ theme }) => theme.totalHeight.medium}), {
@@ -188,8 +208,13 @@ export const StyledScoreContainer = styled.div`
   box-sizing: border-box;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
-    // max-width: 200px;
+    max-width: 200px;
     flex: 1 1 100%;
+  }
+
+  @media screen and (max-width: ${({ theme }) =>
+      theme.breakpoints.mediumSmall}) {
+    max-width: 180px;
   }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.last}) {
@@ -203,7 +228,7 @@ export const StyledButtonContainer = styled.div`
   width: fit-content;
   align-items: center;
   justify-content: center;
-  padding-top: 10px;
+  // padding-top: 10px;
 
   > button {
     height: 25px;
@@ -217,14 +242,14 @@ export const StyledScore = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  height: 150px;
+  // height: 150px;
   width: 200px;
   // border: 3px solid ${({ theme }) => theme.colors.white};
   border-radius: 5px;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
     width: 100px;
-    height: 120px;
+    // height: 120px;
   }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
@@ -236,6 +261,7 @@ export const StyledToast = styled.div`
   opacity: 0;
   display: flex;
   flex: 1 1 100%;
+  padding: 10px 0;
 
   ${({ show }) =>
     show &&
@@ -259,25 +285,36 @@ export const StyledScoreValueContainer = styled.div`
   flex: 1 1 100%;
   align-items: center;
   justify-content: center;
-  height: 40px;
+  // height: 40px;
   position: relative;
+  font-size: 20px;
 
   > h2 {
     position: relative;
   }
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
-    // max-width: 200px;
-  }
+  // @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+  //   max-width: 200px;
+  // }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
     height: fit-content;
+    max-width: 200px;
+  }
+
+  @media screen and (max-width: ${({ theme }) =>
+      theme.breakpoints.mediumSmall}) {
+    max-width: 180px;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
+    padding-bottom: 10px;
   }
 `;
 
 export const StyledScoreValue = styled.span`
   position: relative;
-  font-size: 25px;
+  // font-size: 20px;
   padding-left: 5px;
   max-width: calc(300px - 70px);
   white-space: nowrap;
@@ -285,26 +322,16 @@ export const StyledScoreValue = styled.span`
   text-overflow: ellipsis;
   color: ${({ theme }) => theme.colors.green};
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
-    font-size: 20px;
-  }
+  // @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
+  //   font-size: 20px;
+  // }
 `;
 
-export const StyledHeading = styled.h2`
-  font-weight: normal;
-  margin: 0;
-  font-size: 25px;
-
-  ${({ first }) =>
-    first &&
-    css`
-      padding-bottom: 10px;
-    `}
-
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}) {
-    font-size: 20px;
-  }
-`;
+// export const StyledHeading = styled.h2`
+//   // font-weight: normal;
+//   // margin: 0;
+//   // font-size: 25px;
+// `;
 
 export const StyledSideColumn = styled.div`
 display: flex;
@@ -326,6 +353,7 @@ box-sizing: border-box;
 export const StyledMessageContainer = styled.div`
   display: flex;
   justify-content: center;
+  margin: 10px;
   padding: 10px;
   flex-wrap: wrap;
   border: 2px solid ${({ theme }) => theme.colors.red};
@@ -333,15 +361,22 @@ export const StyledMessageContainer = styled.div`
   max-width: 300px;
   > p {
     flex: 1 1 100%;
-    font-size: 20px;
+    font-size: 15px;
   }
 `;
 
-export const StyledGameOverContainer = styled.div`
-  border: 2px solid red;
-  display: flex;
-`;
+// export const StyledGameOverContainer = styled.div`
+//   border: 2px solid red;
+//   display: flex;
+//   font-size: 20px;
+// `;
 
 export const StyledGameOver = styled.h2`
   color: ${({ theme }) => theme.colors.red};
+  font-size: 25px;
+  flex: 1 1 100%;
+`;
+
+export const StyledFinalScoreHeading = styled.h2`
+  padding: 20px 0;
 `;

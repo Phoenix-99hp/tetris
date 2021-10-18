@@ -10,6 +10,7 @@ export const StyledPageContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
   align-items: center;
   box-sizing: border-box;
+  user-select: none;
 `;
 
 export const StyledMainContent = styled.main`
@@ -43,6 +44,7 @@ export const StyledHeader = styled.header`
 
   > span {
     border-bottom: 2px solid ${({ theme }) => theme.colors.white};
+    font-family: GeoramaSemiBoldItalic;
   }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
@@ -51,6 +53,10 @@ export const StyledHeader = styled.header`
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.last}) {
     font-size: 30px;
+
+    > span {
+      border-bottom: none;
+    }
   } ;
 `;
 
@@ -67,5 +73,3 @@ export const StyledPageInner = styled.div`
   max-width: 1200px;
   width: 100%;
 `;
-
-// export const StyledLetter = styled.span``;

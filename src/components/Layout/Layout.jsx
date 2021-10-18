@@ -3,8 +3,7 @@ import {
   StyledPageContainer,
   StyledPageInner,
   StyledMainContent,
-  StyledHeader,
-  StyledLetter
+  StyledHeader
 } from "./LayoutStyle";
 
 const Layout = ({ children }) => {

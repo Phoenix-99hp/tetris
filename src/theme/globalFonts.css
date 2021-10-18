@@ -1,0 +1,14 @@
+@font-face {
+  font-family: "GeoramaSemiBoldItalic";
+  src: url(../fonts/GeoramaSemiBoldItalic.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "GeoramaLight";
+  src: url(../fonts/GeoramaLight.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "GeoramaLightItalic";
+  src: url(../fonts/GeoramaLightItalic.ttf) format("truetype");
+}

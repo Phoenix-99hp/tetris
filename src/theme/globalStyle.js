@@ -21,6 +21,9 @@ h2 {
   margin: 0;
   font-size: 20px;
 }
+p {
+  margin: 0;
+}
 `;
 
 export default GlobalStyle;

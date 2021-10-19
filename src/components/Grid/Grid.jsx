@@ -8,7 +8,6 @@ import {
   StyledScoreContainer,
   StyledButtonContainer,
   StyledScore,
-  // StyledHeading,
   StyledScoreValueContainer,
   StyledScoreValue,
   StyledToast,
@@ -145,6 +144,25 @@ const commifyScore = value => {
     }
   });
   return mapped.reverse().toString().replace(/,/g, "").replace(/comma/g, ",");
+};
+
+const shouldUpdateCoordinatesOnRotate = (sortedNewCoordinates, squares) => {
+  if (
+    !sortedNewCoordinates.filter(
+      coordinate =>
+        coordinate.toString().endsWith("9") &&
+        sortedNewCoordinates.filter(newCoordinate =>
+          newCoordinate.toString().endsWith("0")
+        ).length >= 1
+    )[0] &&
+    !squares.filter(({ coordinate }) =>
+      sortedNewCoordinates.includes(coordinate)
+    )[0]
+  ) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 const generated = generateSquares();
@@ -558,15 +576,20 @@ const reducer = (state, action) => {
               }
             })
             .sort((a, b) => a - b);
-          let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-            coordinate =>
-              coordinate.toString().endsWith("9") &&
-              sortedNewCoordinates.filter(newCoordinate =>
-                newCoordinate.toString().endsWith("0")
-              ).length >= 1
-          )[0]
-            ? true
-            : false;
+          let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+            sortedNewCoordinates,
+            state.squares
+          );
+          console.log(shouldUpdateToNewCoordinates);
+          // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+          //   coordinate =>
+          //     coordinate.toString().endsWith("9") &&
+          //     sortedNewCoordinates.filter(newCoordinate =>
+          //       newCoordinate.toString().endsWith("0")
+          //     ).length >= 1
+          // )[0]
+          //   ? true
+          //   : false;
           return {
             ...state,
             keyPressed: true,
@@ -590,15 +613,20 @@ const reducer = (state, action) => {
               }
             })
             .sort((a, b) => a - b);
-          let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-            coordinate =>
-              coordinate.toString().endsWith("9") &&
-              sortedNewCoordinates.filter(newCoordinate =>
-                newCoordinate.toString().endsWith("0")
-              ).length >= 1
-          )[0]
-            ? true
-            : false;
+          let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+            sortedNewCoordinates,
+            state.squares
+          );
+          console.log(shouldUpdateToNewCoordinates);
+          // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+          //   coordinate =>
+          //     coordinate.toString().endsWith("9") &&
+          //     sortedNewCoordinates.filter(newCoordinate =>
+          //       newCoordinate.toString().endsWith("0")
+          //     ).length >= 1
+          // )[0]
+          //   ? true
+          //   : false;
           return {
             ...state,
             activeKeyCode: null,
@@ -625,15 +653,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -657,15 +690,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -689,15 +727,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -721,15 +764,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -755,15 +803,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -787,15 +840,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -819,15 +877,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -851,15 +914,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -887,15 +955,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -922,15 +995,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -956,15 +1034,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -991,15 +1074,20 @@ const reducer = (state, action) => {
                 }
               })
               .sort((a, b) => a - b);
-            let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-              coordinate =>
-                coordinate.toString().endsWith("9") &&
-                sortedNewCoordinates.filter(newCoordinate =>
-                  newCoordinate.toString().endsWith("0")
-                ).length >= 1
-            )[0]
-              ? true
-              : false;
+            let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+              sortedNewCoordinates,
+              state.squares
+            );
+            console.log(shouldUpdateToNewCoordinates);
+            // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+            //   coordinate =>
+            //     coordinate.toString().endsWith("9") &&
+            //     sortedNewCoordinates.filter(newCoordinate =>
+            //       newCoordinate.toString().endsWith("0")
+            //     ).length >= 1
+            // )[0]
+            //   ? true
+            //   : false;
             return {
               ...state,
               keyPressed: true,
@@ -1026,15 +1114,20 @@ const reducer = (state, action) => {
               }
             })
             .sort((a, b) => a - b);
-          let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-            coordinate =>
-              coordinate.toString().endsWith("9") &&
-              sortedNewCoordinates.filter(newCoordinate =>
-                newCoordinate.toString().endsWith("0")
-              ).length >= 1
-          )[0]
-            ? true
-            : false;
+          let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+            sortedNewCoordinates,
+            state.squares
+          );
+          console.log(shouldUpdateToNewCoordinates);
+          // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+          //   coordinate =>
+          //     coordinate.toString().endsWith("9") &&
+          //     sortedNewCoordinates.filter(newCoordinate =>
+          //       newCoordinate.toString().endsWith("0")
+          //     ).length >= 1
+          // )[0]
+          //   ? true
+          //   : false;
           return {
             ...state,
             keyPressed: true,
@@ -1058,15 +1151,20 @@ const reducer = (state, action) => {
               }
             })
             .sort((a, b) => a - b);
-          let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-            coordinate =>
-              coordinate.toString().endsWith("9") &&
-              sortedNewCoordinates.filter(newCoordinate =>
-                newCoordinate.toString().endsWith("0")
-              ).length >= 1
-          )[0]
-            ? true
-            : false;
+          let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+            sortedNewCoordinates,
+            state.squares
+          );
+          console.log(shouldUpdateToNewCoordinates);
+          // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+          //   coordinate =>
+          //     coordinate.toString().endsWith("9") &&
+          //     sortedNewCoordinates.filter(newCoordinate =>
+          //       newCoordinate.toString().endsWith("0")
+          //     ).length >= 1
+          // )[0]
+          //   ? true
+          //   : false;
           return {
             ...state,
             keyPressed: true,
@@ -1090,15 +1188,20 @@ const reducer = (state, action) => {
               }
             })
             .sort((a, b) => a - b);
-          let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-            coordinate =>
-              coordinate.toString().endsWith("9") &&
-              sortedNewCoordinates.filter(newCoordinate =>
-                newCoordinate.toString().endsWith("0")
-              ).length >= 1
-          )[0]
-            ? true
-            : false;
+          let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+            sortedNewCoordinates,
+            state.squares
+          );
+          console.log(shouldUpdateToNewCoordinates);
+          // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+          //   coordinate =>
+          //     coordinate.toString().endsWith("9") &&
+          //     sortedNewCoordinates.filter(newCoordinate =>
+          //       newCoordinate.toString().endsWith("0")
+          //     ).length >= 1
+          // )[0]
+          //   ? true
+          //   : false;
           return {
             ...state,
             keyPressed: true,
@@ -1122,15 +1225,20 @@ const reducer = (state, action) => {
               }
             })
             .sort((a, b) => a - b);
-          let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
-            coordinate =>
-              coordinate.toString().endsWith("9") &&
-              sortedNewCoordinates.filter(newCoordinate =>
-                newCoordinate.toString().endsWith("0")
-              ).length >= 1
-          )[0]
-            ? true
-            : false;
+          let shouldUpdateToNewCoordinates = shouldUpdateCoordinatesOnRotate(
+            sortedNewCoordinates,
+            state.squares
+          );
+          console.log(shouldUpdateToNewCoordinates);
+          // let shouldUpdateToNewCoordinates = !sortedNewCoordinates.filter(
+          //   coordinate =>
+          //     coordinate.toString().endsWith("9") &&
+          //     sortedNewCoordinates.filter(newCoordinate =>
+          //       newCoordinate.toString().endsWith("0")
+          //     ).length >= 1
+          // )[0]
+          //   ? true
+          //   : false;
           return {
             ...state,
             keyPressed: true,
@@ -1175,8 +1283,9 @@ const Grid = () => {
     e.stopImmediatePropagation();
     if (
       // state.keyPressed ||
-      state.activeKeyCode &&
-      e.keyCode !== state.activeKeyCode
+      state.activeKeyCode
+      // &&
+      // e.keyCode !== state.activeKeyCode
     ) {
       return;
     } else {
@@ -1190,6 +1299,7 @@ const Grid = () => {
           return dispatch({ type: "TRIGGER_MANUAL_LEFT" });
         case 32: // spacebar;
           if (!e.repeat) {
+            console.log("TRIGGER");
             return dispatch({ type: "TRIGGER_MANUAL_ROTATE" });
           }
       }
@@ -1199,7 +1309,7 @@ const Grid = () => {
   const keyupHandler = useCallback(e => {
     e.preventDefault();
     e.stopImmediatePropagation();
-    if (state.keyPressed) {
+    if (state.activeKeyCode) {
       dispatch({ type: "KEYUP" });
     }
   }, []);
@@ -1264,7 +1374,7 @@ const Grid = () => {
     } else if (!state.paused) {
       setTimeout(() => {
         dispatch({ type: "SLIDE_COORDINATES" });
-      }, 400);
+      }, 300);
     }
   }, [state.activeCoordinates, state.paused]);
 

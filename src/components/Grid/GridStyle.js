@@ -232,7 +232,7 @@ export const StyledButtonContainer = styled.div`
 
   > button {
     height: 25px;
-    width: 85px;
+    width: 75px;
     cursor: pointer;
   }
 `;
@@ -261,7 +261,7 @@ export const StyledToast = styled.div`
   opacity: 0;
   display: flex;
   flex: 1 1 100%;
-  padding: 10px 0;
+  padding: 20px 0;
 
   ${({ show }) =>
     show &&
@@ -353,7 +353,7 @@ box-sizing: border-box;
 export const StyledMessageContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin: 10px;
+  margin: 0 10px;
   padding: 10px;
   flex-wrap: wrap;
   border: 2px solid ${({ theme }) => theme.colors.red};

@@ -37,22 +37,36 @@ export const StyledHeader = styled.header`
   width: 100%;
   color: white;
   padding: 40px 0;
-  font-size: 40px;
-  text-shadow: 1px 1px 1px blue;
+  font-size: 43px;
+  // text-shadow: 1px 1px 1px blue;
   box-sizing: border-box;
+  flex-wrap: wrap;
   color: ${({ theme }) => theme.colors.blue};
 
   > span {
-    border-bottom: 2px solid ${({ theme }) => theme.colors.white};
+    border-bottom: 3px solid ${({ theme }) => theme.colors.white};
     font-family: GeoramaSemiBoldItalic;
+    text-shadow: 1px 1px 1px blue;
   }
+
+  // > p {
+  //   margin-top: 10px;
+  //   font-size: 8px;
+  //   color: ${({ theme }) => theme.colors.white};
+  //   flex: 1 1 100%;
+  // }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
     padding: 30px 0;
   }
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.last}) {
+  @media screen and (max-width: ${({ theme }) =>
+      theme.breakpoints.extraSmall}) {
     font-size: 30px;
+  }
+
+  @media screen and (max-width: 160px) {
+    // font-size: 30px;
 
     > span {
       border-bottom: none;
@@ -60,14 +74,17 @@ export const StyledHeader = styled.header`
   } ;
 `;
 
-// export const StyledFooter = styled.footer`
-//   display: flex;
-//   flex: 0 1 40px;
-//   justify-content: center;
-//   align-items: center;
-//   width: 100%;
-//   box-sizing: border-box;
-// `;
+export const StyledFooter = styled.footer`
+  display: flex;
+  height: 40px;
+  // flex: 0 1 40px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 10px;
+  color: ${({ theme }) => theme.colors.white};
+`;
 
 export const StyledPageInner = styled.div`
   max-width: 1200px;

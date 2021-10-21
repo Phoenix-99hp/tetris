@@ -57,15 +57,16 @@ export const StyledHeader = styled.header`
   // }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.small}) {
-    padding: 30px 0;
+    padding: 20px 0;
   }
 
   @media screen and (max-width: ${({ theme }) =>
       theme.breakpoints.extraSmall}) {
     font-size: 30px;
+    padding: 10px 0;
   }
 
-  @media screen and (max-width: 160px) {
+  @media screen and (max-width: ${({ theme }) => theme.unsupported.minWidth}) {
     // font-size: 30px;
 
     > span {

@@ -6,7 +6,7 @@ export default {
   },
   unsupported: {
     minHeight: "530.8",
-    minWidth: "160"
+    minWidth: "190"
   },
   colors: {
     green: "#9ece6a",
@@ -32,8 +32,7 @@ export default {
     last: "15",
     extraSmall: "20",
     small: "25",
-    medium: "30",
-    large: "40"
+    medium: "30"
   },
   nextShape: {
     0: {

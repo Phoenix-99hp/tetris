@@ -1,6 +1,7 @@
 export default {
   totalHeight: {
-    extraSmall: "645.2px",
+    extraSmall: "720px",
+    // extraSmall: "64,5.2px",
     small: "745.2px",
     medium: "775.4px"
   },

@@ -16,6 +16,7 @@ import {
   StyledToastValue,
   StyledOuter,
   StyledInner,
+  StyledDrawBorder,
   StyledGridContainer,
   StyledMessageContainer,
   StyledGameOver,
@@ -124,11 +125,18 @@ const Grid = () => {
       window.innerWidth >= theme.unsupported.minWidth &&
       window.innerHeight >= theme.unsupported.minHeight
     ) {
-      dispatch({ type: "SUPPORTED", payload: { supported: true } });
+      dispatch({
+        type: "SUPPORTED",
+        payload: { supported: true }
+      });
     } else {
       dispatch({
         type: "SUPPORTED",
         payload: { supported: false, paused: true }
+      });
+      dispatch({
+        type: "START_PAUSE_TEXT",
+        payload: "Start"
       });
     }
   };
@@ -136,6 +144,12 @@ const Grid = () => {
   const pauseHandler = e => {
     e.preventDefault();
     e.stopPropagation();
+    if (state.startPauseText) {
+      dispatch({
+        type: "START_PAUSE_TEXT",
+        payload: null
+      });
+    }
     if (state.paused && !state.countdown) {
       dispatch({ type: "SET_COUNTDOWN" });
     } else {
@@ -211,27 +225,47 @@ const Grid = () => {
       setTimeout(clearToast, 300);
       dispatch({ type: "RESET_ROWS" });
       dispatch({ type: "SET_ACTIVE_SHAPE" });
+      console.log("SET_ACTVE");
     }
   }, [state.shouldGenerateNewShape, state.gameOver]);
 
   useEffect(() => {
-    dispatch({
-      type: "UPDATE_NEXT_SQUARES",
-      payload:
-        nextShape[state.nextShape.coordinates.toString()].rows *
-        nextShape[state.nextShape.coordinates.toString()].cols
-    });
+    if (state.nextShape) {
+      dispatch({
+        type: "UPDATE_NEXT_SQUARES",
+        payload:
+          nextShape[state.nextShape.coordinates.toString()].rows *
+          nextShape[state.nextShape.coordinates.toString()].cols
+      });
+    } else {
+      window.removeEventListener("keydown", keydownHandler);
+      window.removeEventListener("keyup", keyupHandler);
+      dispatch({ type: "END_GAME" });
+    }
   }, [state.nextShape]);
 
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-    } else if (state.keyPressed) {
-      dispatch({ type: "KEYUP" });
-    } else if (!state.paused) {
-      setTimeout(() => {
-        dispatch({ type: "SLIDE_COORDINATES" });
-      }, 300);
+    console.log("EFFECT FINAL");
+    if (state.nextShape) {
+      if (!isMounted.current) {
+        isMounted.current = true;
+      } else if (state.keyPressed) {
+        console.log("KEYUP");
+        dispatch({ type: "KEYUP" });
+      } else if (!state.paused) {
+        setTimeout(() => {
+          dispatch({ type: "SLIDE_COORDINATES" });
+        }, 300);
+      }
+    } else if (state.endGame) {
+      console.log("GAME_OVERRRRRRR");
+      dispatch({ type: "GAME_OVER" });
+      // setTimeout(() => dispatch({ type: "GAME_OVER" }, 1000));
+    } else {
+      // console.log("GAME OVER");
+      // dispatch({ type: "GAME_OVER" });
+      console.log("end game");
+      dispatch({ type: "END_GAME" });
     }
   }, [state.activeCoordinates, state.paused]);
 
@@ -255,20 +289,33 @@ const Grid = () => {
               </StyledScoreValueContainer>
               <StyledNextShape show={true} border={true}>
                 <StyledNextShapeGrid
-                  color={state.nextShape.shape.color}
-                  shape={state.nextShape.shape.num}
-                  cols={nextShape[state.nextShape.coordinates.toString()].cols}
-                  rows={nextShape[state.nextShape.coordinates.toString()].rows}
+                  color={state.nextShape ? state.nextShape.shape.color : ""}
+                  shape={state.nextShape ? state.nextShape.shape.num : ""}
+                  cols={
+                    state.nextShape
+                      ? nextShape[state.nextShape.coordinates.toString()].cols
+                      : ""
+                  }
+                  rows={
+                    state.nextShape
+                      ? nextShape[state.nextShape.coordinates.toString()].rows
+                      : ""
+                  }
                 >
                   {state.nextSquares.total.map(square => (
                     <GridItem
                       border={
-                        nextShape[state.nextShape.coordinates.toString()].border
+                        state.nextShape
+                          ? nextShape[state.nextShape.coordinates.toString()]
+                              .border
+                          : ""
                       }
                       color={
                         state.initial
                           ? ""
-                          : state.nextSquares.colored.includes(square)
+                          : state.nextShape &&
+                            state.nextSquares.colored &&
+                            state.nextSquares.colored.includes(square)
                           ? theme.colors[state.nextShape.shape.color]
                           : ""
                       }
@@ -282,6 +329,7 @@ const Grid = () => {
           <StyledOuter>
             <StyledInner>
               <StyledGridContainer>
+                {/* <StyledDrawBorder /> */}
                 {state.squares.map(({ coordinate, color, row }, index) => (
                   <GridItem
                     row={row}
@@ -431,7 +479,10 @@ const Grid = () => {
               <StyledScoreValueContainer>
                 <StyledKeysStartPauseContainer>
                   <StyledStartPauseButton onClick={e => pauseHandler(e)}>
-                    {(!state.paused || !state.breakCountdown) && !state.initial
+                    {state.startPauseText
+                      ? state.startPauseText
+                      : (!state.paused || !state.breakCountdown) &&
+                        !state.initial
                       ? "Pause"
                       : "Start"}
                   </StyledStartPauseButton>
@@ -578,7 +629,9 @@ const Grid = () => {
             <StyledScoreValueContainer>
               <StyledKeysStartPauseContainer>
                 <StyledStartPauseButton onClick={e => pauseHandler(e)}>
-                  {(!state.paused || !state.breakCountdown) && !state.initial
+                  {state.startPauseText
+                    ? state.startPauseText
+                    : (!state.paused || !state.breakCountdown) && !state.initial
                     ? "Pause"
                     : "Start"}
                 </StyledStartPauseButton>

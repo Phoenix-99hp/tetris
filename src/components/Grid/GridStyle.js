@@ -28,7 +28,17 @@ export const StyledOuter = styled.div`
 export const StyledInner = styled.div`
   border: 3px solid ${({ theme }) => theme.colors.gameBorder};
   border-radius: 5px;
+  position: relative;
 `;
+
+// export const StyledDrawBorder = styled.div`
+//   height: ${({ theme }) => theme.squareSizes.small}px;
+//   width: ${({ theme }) => theme.squareSizes.small * 10}px;
+//   box-sizing: border-box;
+//   border: 2px solid red;
+//   position: absolute;
+//   top: 0;
+// `;
 
 export const StyledGridContainer = styled.div`
   display: grid;
@@ -459,6 +469,7 @@ export const StyledMessageContainer = styled.div`
   justify-content: center;
   margin: 0 10px;
   padding: 10px;
+  height: 200px;
   flex-wrap: wrap;
   border: 2px solid ${({ theme }) => theme.colors.red};
   border-radius: 5px;

@@ -51,7 +51,11 @@ const initialState = {
   useButtons: false,
   useKeys: true,
   useTouch: false,
-  breakCountdown: false
+  breakCountdown: false,
+  gameOver: false,
+  endGame: false,
+  finalScore: 0,
+  startPauseText: null
 };
 
 export default initialState;

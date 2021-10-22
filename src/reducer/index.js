@@ -27,6 +27,7 @@ const reducer = (state, action) => {
       const toastValue = RTR[0] ? 1000 * RTR.length + 100 : 100;
       const scoreValue = state.score + toastValue;
       const commifiedScore = commifyScore(scoreValue);
+      console.log(commifiedScore, "COMMIFIED SCORE AT CFFR");
       return {
         ...state,
         rowsToReset: RTRcheck,
@@ -66,6 +67,11 @@ const reducer = (state, action) => {
         ...state,
         supported: action.payload.supported,
         paused: action.payload.paused ? action.payload.paused : state.paused
+      };
+    case "START_PAUSE_TEXT":
+      return {
+        ...state,
+        startPauseText: action.payload
       };
     case "RESET_STATE":
       return {
@@ -145,45 +151,23 @@ const reducer = (state, action) => {
         ...state,
         countdown: state.countdown - 1 !== 0 ? state.countdown - 1 : "START"
       };
-    // case "RESET_COUNTDOWN":
-    //   return {
-    //     ...state,
-    //     countdown: null,
-    //     showCountdown: false,
-    //     countdownInProgress:
-    //   };
-    //   if (state.toast <= 1) {
-    //     clearInterval(beginCount);
-    //     return {
-    //       ...state,
-    //       showToast: false,
-    //       toast: null
-    //     };
-    //   } else {
-    //     return {
-    //       ...state,
-    //       showToast: true,
-    //       toast: state.toast - 1
-    //     };
-    //   }
-    // function startStuff(func, time) {
-    //     interval = setInterval(func, time);
-    // }
-
-    // function stopStuff() {
-    //     clearInterval(interval);
-    // }
-    //       if (action.payload === "initial") {
-    //         const count = setInterval(beginCount, 300)
-    //       }
-    //       return {
-    //         ...state,
-    //         toast: action.payload
-    //       }
+    case "GAME_OVER":
+      return {
+        ...state,
+        gameOver: true,
+        keyPressed: false
+        // endGame: true
+      };
+    case "END_GAME":
+      return {
+        ...state,
+        // gameOver: true
+        keyPressed: false,
+        endGame: true
+      };
     case "START":
       return {
         ...state,
-        // countdown: 3,
         paused: false,
         initial: false
       };
@@ -194,94 +178,132 @@ const reducer = (state, action) => {
         ...state,
         activeKeyCode: action.payload
       };
-    // case "SET_TOUCH_ACTIVE":
-    // return {
-    //   ...state,
-    //   touchActive: action.payload
-    // };
     case "SET_ACTIVE_SHAPE":
-      const shape = determineShape();
-      const orientation = determineOrientation();
-      const direction =
-        shape.num === 2 || shape.num === 3
-          ? Math.floor(Math.random() * 2)
-          : null;
-      const coordinates = determineStartingCoordinates(
-        shape.num,
-        orientation,
-        direction
-      );
-      const filtered = state.squares.filter(
-        square => square.coordinate && coordinates.includes(square.coordinate)
-      );
-
-      if (filtered[0]) {
-        // if (filtered[0] && filtered.filter(coordinate => coordinate < 10)[0]) {
-        //   return {
-        //     ...state,
-        //     gameOver: true
-        //   };
-        // } else if (filtered[0]) {
-        //   filtered.forEach(overlapping =>
-        //     coordinates.splice(coordinates.indexOf(overlapping.coordinate), 1)
-        //   );
-        //   coordinates.forEach(coordinate => {
-        //     if (
-        //       coordinate < filtered[0].coordinate &&
-        //       coordinate + 10 <= filtered[0].coordinate
-        //     ) {
-        //       console.log("CHECK");
-        //       state.squares.splice(state.squares.indexOf(coordinate), 1, {
-        //         coordinate: coordinate,
-        //         color: shape.color
-        //       });
-        //     }
-        //   });
+      console.log(state.commifiedScore, "commified at set_Active_shape");
+      if (state.endGame) {
         return {
           ...state,
-          gameOver: true
-        };
-      } else if (state.nextShape.shape.color) {
-        return {
-          ...state,
-          activeShape: state.nextShape.shape,
-          activeOrientation: state.nextShape.orientation,
-          activeCoordinates: state.nextShape.coordinates,
-          direction: state.nextShape.direction,
+          // gameOver: true,
           shouldGenerateNewShape: false,
-          rowsToReset: null,
-          nextShape: {
-            shape: shape,
-            orientation: orientation,
-            coordinates: coordinates,
-            direction: direction
-          }
+          nextShape: null,
+          // commifiedScore: commifyScore(state.score),
+          // gameOver: true,
+          // endGame: true,
+          keyPressed: false
         };
+      } else if (state.nextShape) {
+        const overlapping = state.squares.filter(
+          square =>
+            square.coordinate &&
+            state.nextShape.coordinates.includes(square.coordinate)
+        );
+        const rowZeroOverlap = state.squares.filter(
+          square =>
+            square.coordinate &&
+            state.nextShape.coordinates.includes(square.coordinate) &&
+            square.row === 0
+        );
+        if (rowZeroOverlap[0]) {
+          return {
+            ...state,
+            // gameOver: true,
+            shouldGenerateNewShape: false,
+            nextShape: null,
+            // commifiedScore: commifyScore(state.score),
+            gameOver: true,
+            // endGame: true,
+            keyPressed: false
+          };
+        } else if (overlapping[0]) {
+          const overlappingCoordinates = overlapping.map(
+            square => square.coordinate
+          );
+          const coordinatesToDisplay = state.nextShape.coordinates.filter(
+            coordinate => !overlappingCoordinates.includes(coordinate)
+          );
+          console.log("CTD", coordinatesToDisplay);
+          return {
+            ...state,
+            activeShape: state.nextShape.shape,
+            activeOrientation: state.nextShape.orientation,
+            activeCoordinates: coordinatesToDisplay,
+            direction: state.nextShape.direction,
+            shouldGenerateNewShape: false,
+            rowsToReset: null,
+            endGame: true,
+            nextShape: null,
+            shouldGenerateNewShape: false
+          };
+        } else if (state.nextShape.shape.color) {
+          const shape = determineShape();
+          const orientation = determineOrientation();
+          const direction =
+            shape.num === 2 || shape.num === 3
+              ? Math.floor(Math.random() * 2)
+              : null;
+          const coordinates = determineStartingCoordinates(
+            shape.num,
+            orientation,
+            direction
+          );
+          return {
+            ...state,
+            activeShape: state.nextShape.shape,
+            activeOrientation: state.nextShape.orientation,
+            activeCoordinates: state.nextShape.coordinates,
+            direction: state.nextShape.direction,
+            shouldGenerateNewShape: false,
+            rowsToReset: null,
+            nextShape: {
+              shape: shape,
+              orientation: orientation,
+              coordinates: coordinates,
+              direction: direction
+            }
+          };
+        } else {
+          console.log("NO NEXT");
+          return {
+            ...state,
+            gameOver: true,
+            keyPressed: false,
+            shouldGenerateNewShape: false
+          };
+        }
       }
     case "UPDATE_NEXT_SQUARES":
       const newSquares = [];
       for (let i = 0; i < action.payload; i++) {
         newSquares.push(i);
       }
-      // const coloredCoordinates = {
-      //   0: [0, 1, 2, 3],
-      //   1: [0, 1, 2, 3],
-
-      //   // 2: [0, 2, 4, 5],
-      //   3: [0, 1, 4, 5],
-      //   4: [1, 3, 4, 5]
-
-      // };
       return {
         ...state,
         nextSquares: {
           total: newSquares,
-          colored: nextShape[state.nextShape.coordinates.toString()].colored
-          // shape.num
+          colored: state.nextShape
+            ? nextShape[state.nextShape.coordinates.toString()].colored
+            : ""
         }
       };
     case "SLIDE_COORDINATES":
-      if (
+      console.log("SLIDE");
+      if (state.endGame) {
+        console.log("END GAME");
+        return {
+          ...state,
+          gameOver: true
+        };
+        // return {
+        //   keyPressed: false,
+        //   shouldGenerateNewShape: false
+        // };
+        // return {
+        //   ...state,
+        //   keyPressed: false,
+        //   shouldGenerateNewShape: false,
+        //   gameOver: true
+        // };
+      } else if (
         !state.activeCoordinates.filter(
           coordinate =>
             coordinate > 189 || state.squares[coordinate + 10].coordinate
@@ -1160,11 +1182,18 @@ const reducer = (state, action) => {
         };
       }
     case "KEYUP":
-      // if (state.useKeys) {
+      // if (state.endGame) {
+      //   return {
+      //     ...state,
+      //     keyPressed: false,
+      //     gameOver: true
+      //   };
+      // } else {
       return {
         ...state,
         keyPressed: false
       };
+    // }
     // } else {
     //   return;
     // }

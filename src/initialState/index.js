@@ -28,10 +28,7 @@ const initialState = {
   activeKeyCode: null,
   direction: null,
   score: 0,
-  toast: {
-    value: null,
-    id: 0
-  },
+  toast: null,
   showToast: false,
   rowsToReset: null,
   nextShape: {
@@ -55,7 +52,6 @@ const initialState = {
   useKeys: true,
   useTouch: false,
   breakCountdown: false
-  // touchActive: false
 };
 
 export default initialState;

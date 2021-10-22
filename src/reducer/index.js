@@ -6,6 +6,7 @@ import {
   shouldUpdateCoordinatesOnRotate
 } from "../helpers";
 import initialState from "../initialState";
+import { nextShape } from "../data";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -31,10 +32,7 @@ const reducer = (state, action) => {
         rowsToReset: RTRcheck,
         score: scoreValue,
         commifiedScore: commifiedScore,
-        toast: {
-          value: toastValue,
-          id: state.toast.id + 1
-        }
+        toast: toastValue
       };
     case "TOGGLE_SHOW_CONTROLS":
       return {
@@ -63,16 +61,6 @@ const reducer = (state, action) => {
         useKeys: false,
         useTouch: true
       };
-    // case "TOGGLE_USE_BUTTONS":
-    //   return {
-    //     ...state,
-    //     useButtons: !state.useButtons
-    //   };
-    // case "SET_COUNT_DOWN":
-    //   return {
-    //     ...state,
-    //     countdown: action.payload
-    //   };
     case "SUPPORTED":
       return {
         ...state,
@@ -275,18 +263,21 @@ const reducer = (state, action) => {
       for (let i = 0; i < action.payload; i++) {
         newSquares.push(i);
       }
-      const coloredCoordinates = {
-        0: [0, 1, 2, 3],
-        1: [0, 1, 2, 3],
-        2: [0, 2, 4, 5],
-        3: [0, 1, 4, 5],
-        4: [1, 3, 4, 5]
-      };
+      // const coloredCoordinates = {
+      //   0: [0, 1, 2, 3],
+      //   1: [0, 1, 2, 3],
+
+      //   // 2: [0, 2, 4, 5],
+      //   3: [0, 1, 4, 5],
+      //   4: [1, 3, 4, 5]
+
+      // };
       return {
         ...state,
         nextSquares: {
           total: newSquares,
-          colored: coloredCoordinates[state.nextShape.shape.num]
+          colored: nextShape[state.nextShape.coordinates.toString()].colored
+          // shape.num
         }
       };
     case "SLIDE_COORDINATES":

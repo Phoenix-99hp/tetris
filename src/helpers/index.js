@@ -111,11 +111,14 @@ export const determineStartingCoordinates = (shape, orientation, direction) => {
 
 export const commifyScore = value => {
   const score = value.toString().split("");
-  let x = 0;
+  let skip = [];
   const mapped = score.reverse().map((num, i) => {
-    if (score.length >= 4 && i > 2 && score[x + 3]) {
-      x += 3;
+    if (score.length >= 4 && i > 2 && i < score.length && !skip[0]) {
+      skip = [i + 1, i + 2];
       return `${num}comma`;
+    } else if (skip[0]) {
+      skip.splice(0, 1);
+      return num;
     } else {
       return num;
     }
@@ -144,17 +147,3 @@ export const shouldUpdateCoordinatesOnRotate = (
     return false;
   }
 };
-
-// export const generated = generateSquares();
-
-// export const nextShape = determineShape();
-// export const nextOrientation = determineOrientation();
-// export const nextDirection =
-//   nextShape.num === 2 || nextShape.num === 3
-//     ? Math.floor(Math.random() * 2)
-//     : null;
-// export const nextCoordinates = determineStartingCoordinates(
-//   nextShape.num,
-//   nextOrientation,
-//   nextDirection
-// );

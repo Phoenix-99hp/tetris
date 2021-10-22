@@ -179,50 +179,41 @@ export const StyledNextShape = styled.div`
 
 export const StyledNextShapeGrid = styled.div`
   display: grid;
-  ${({ shape }) =>
-    shape &&
+  ${({ border }) =>
+    border &&
     css`
-    border-top: ${({ theme, shape }) =>
-      theme.nextShape[shape].border.grid.top
-        ? `1px solid ${theme.colors.gridBorder}`
-        : "none"}
-    border-bottom:${({ theme, shape }) =>
-      theme.nextShape[shape].border.grid.bottom
-        ? `1px solid ${theme.colors.gridBorder}`
-        : "none"}
-    border-left:${({ theme, shape }) =>
-      theme.nextShape[shape].border.grid.left
-        ? `1px solid ${theme.colors.gridBorder}`
-        : "none"}
-    border-right:${({ theme, shape }) =>
-      theme.nextShape[shape].border.grid.right
-        ? `1px solid ${theme.colors.gridBorder}`
-        : "none"}
-  `}
+      border-top: ${({ theme }) =>
+        border.grid.top ? `1px solid ${theme.colors.gridBorder}` : "none"};
+      border-bottom: ${({ theme }) =>
+        border.grid.bottom ? `1px solid ${theme.colors.gridBorder}` : "none"};
+      border-left: ${({ theme }) =>
+        border.grid.left ? `1px solid ${theme.colors.gridBorder}` : "none"};
+      border-right: ${({ theme }) =>
+        border.grid.right ? `1px solid ${theme.colors.gridBorder}` : "none"};
+    `}
   ${({ color }) =>
     color &&
     css`
       grid-template-rows: repeat(
-        ${({ shape, theme }) => theme.nextShape[shape].rows},
+        ${({ rows }) => rows},
         ${({ theme }) => theme.squareSizes.medium}px
       );
       grid-template-columns: repeat(
-        ${({ shape, theme }) => theme.nextShape[shape].cols},
+        ${({ cols }) => cols},
         ${({ theme }) => theme.squareSizes.medium}px
       );
     `};
-
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.medium}),
-    screen and (max-height: ${({ theme }) => theme.totalHeight.medium}), {
+    screen and (max-height: ${({ theme }) => theme.totalHeight.medium}) {
     ${({ color }) =>
       color &&
       css`
         grid-template-rows: repeat(
-          ${({ shape, theme }) => theme.nextShape[shape].rows},
+          ${({ rows }) => rows},
           ${({ theme }) => theme.squareSizes.small}px
         );
         grid-template-columns: repeat(
-          ${({ shape, theme }) => theme.nextShape[shape].cols},
+          ${({ cols }) => cols},
           ${({ theme }) => theme.squareSizes.small}px
         );
       `};
@@ -233,11 +224,11 @@ export const StyledNextShapeGrid = styled.div`
       color &&
       css`
         grid-template-rows: repeat(
-          ${({ shape, theme }) => theme.nextShape[shape].rows},
+          ${({ rows }) => rows},
           ${({ theme }) => theme.squareSizes.extraSmall}px
         );
         grid-template-columns: repeat(
-          ${({ shape, theme }) => theme.nextShape[shape].cols},
+          ${({ cols }) => cols},
           ${({ theme }) => theme.squareSizes.extraSmall}px
         );
       `};
@@ -249,11 +240,11 @@ export const StyledNextShapeGrid = styled.div`
       color &&
       css`
         grid-template-rows: repeat(
-          ${({ shape, theme }) => theme.nextShape[shape].rows},
+          ${({ rows }) => rows},
           ${({ theme }) => theme.squareSizes.last}px
         );
         grid-template-columns: repeat(
-          ${({ shape, theme }) => theme.nextShape[shape].cols},
+          ${({ cols }) => cols},
           ${({ theme }) => theme.squareSizes.last}px
         );
       `};

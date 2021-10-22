@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useReducer, useCallback } from "react";
 import { useTheme } from "styled-components";
 import initialState from "../../initialState";
+import { nextShape } from "../../data";
 import reducer from "../../reducer";
 import {
   StyledNextShapeContainer,
@@ -151,12 +152,6 @@ const Grid = () => {
     dispatch({ type: "TOGGLE_SHOW_CONTROLS" });
   };
 
-  // const toastAnimationEndHandler = () => {
-  //   if (state.showToast) {
-  //     dispatch({ type: "HIDE_TOAST" });
-  //   }
-  // };
-
   const clearToast = () => {
     dispatch({ type: "HIDE_TOAST" });
   };
@@ -223,8 +218,8 @@ const Grid = () => {
     dispatch({
       type: "UPDATE_NEXT_SQUARES",
       payload:
-        theme.nextShape[state.nextShape.shape.num].rows *
-        theme.nextShape[state.nextShape.shape.num].cols
+        nextShape[state.nextShape.coordinates.toString()].rows *
+        nextShape[state.nextShape.coordinates.toString()].cols
     });
   }, [state.nextShape]);
 
@@ -240,6 +235,15 @@ const Grid = () => {
     }
   }, [state.activeCoordinates, state.paused]);
 
+  // useEffect(() => {
+  //   if (isMounted.current && !state.supported) {
+  //     dispatch({
+  //       type: "SUPPORTED",
+  //       payload: { supported: false, paused: true }
+  //     });
+  //   }
+  // }, [state.supported]);
+
   return (
     <>
       {state.supported && !state.gameOver ? (
@@ -253,10 +257,14 @@ const Grid = () => {
                 <StyledNextShapeGrid
                   color={state.nextShape.shape.color}
                   shape={state.nextShape.shape.num}
+                  cols={nextShape[state.nextShape.coordinates.toString()].cols}
+                  rows={nextShape[state.nextShape.coordinates.toString()].rows}
                 >
                   {state.nextSquares.total.map(square => (
                     <GridItem
-                      border={theme.nextShape[state.nextShape.shape.num].border}
+                      border={
+                        nextShape[state.nextShape.coordinates.toString()].border
+                      }
                       color={
                         state.initial
                           ? ""
@@ -307,11 +315,8 @@ const Grid = () => {
                     {state.countdown}
                   </StyledToastValue>
                 ) : (
-                  <StyledToastValue
-                    show={state.showToast}
-                    // onAnimationEnd={toastAnimationEndHandler}
-                  >
-                    {`+ ${state.toast.value}`}
+                  <StyledToastValue show={state.showToast}>
+                    {`+ ${state.toast}`}
                   </StyledToastValue>
                 )}
               </StyledToast>

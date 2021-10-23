@@ -466,10 +466,16 @@ box-sizing: border-box;
 
 export const StyledMessageContainer = styled.div`
   display: flex;
+  flex: 1 1 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(calc(-50% - 150px));
   justify-content: center;
+  align-items: center;
   margin: 0 10px;
   padding: 10px;
-  height: 200px;
+  // height: 200px;
+  // height: 100%;
   flex-wrap: wrap;
   border: 2px solid ${({ theme }) => theme.colors.red};
   border-radius: 5px;
@@ -480,20 +486,18 @@ export const StyledMessageContainer = styled.div`
   }
 `;
 
-// export const StyledGameOverContainer = styled.div`
-//   border: 2px solid red;
-//   display: flex;
-//   font-size: 20px;
-// `;
-
 export const StyledGameOver = styled.h2`
+  padding-bottom: 20px;
   color: ${({ theme }) => theme.colors.red};
   font-size: 25px;
   flex: 1 1 100%;
 `;
 
 export const StyledFinalScoreHeading = styled.h2`
-  padding: 20px 0;
+  padding: 0 0 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const StyledControlsContainer = styled.div`

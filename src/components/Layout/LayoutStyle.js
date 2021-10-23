@@ -16,7 +16,8 @@ export const StyledPageContainer = styled.div`
 export const StyledMainContent = styled.main`
   display: flex;
   width: 100%;
-  position: relative;
+  height: 100%;
+  // position: relative;
   justify-content: center;
   color: white;
   flex: 1 1 100%;

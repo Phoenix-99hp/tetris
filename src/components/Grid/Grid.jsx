@@ -16,9 +16,9 @@ import {
   StyledToastValue,
   StyledOuter,
   StyledInner,
-  StyledDrawBorder,
   StyledGridContainer,
   StyledMessageContainer,
+  // StyledMessageInner,
   StyledGameOver,
   StyledFinalScoreHeading,
   StyledMoveRotateContainer,
@@ -116,6 +116,7 @@ const Grid = () => {
     if (state.useKeys || state.useButtons) {
       return;
     } else if (state.activeKeyCode) {
+      clearInterval(longTouchHandler);
       dispatch({ type: "TOUCH_END" });
     }
   };
@@ -245,7 +246,6 @@ const Grid = () => {
   }, [state.nextShape]);
 
   useEffect(() => {
-    console.log("EFFECT FINAL");
     if (state.nextShape) {
       if (!isMounted.current) {
         isMounted.current = true;
@@ -253,30 +253,13 @@ const Grid = () => {
         console.log("KEYUP");
         dispatch({ type: "KEYUP" });
       } else if (!state.paused) {
-        setTimeout(() => {
-          dispatch({ type: "SLIDE_COORDINATES" });
-        }, 300);
+        setTimeout(() => dispatch({ type: "SLIDE_COORDINATES" }), 300);
       }
-    } else if (state.endGame) {
-      console.log("GAME_OVERRRRRRR");
-      dispatch({ type: "GAME_OVER" });
-      // setTimeout(() => dispatch({ type: "GAME_OVER" }, 1000));
-    } else {
-      // console.log("GAME OVER");
-      // dispatch({ type: "GAME_OVER" });
-      console.log("end game");
+    } else if (isMounted.current) {
       dispatch({ type: "END_GAME" });
+      setTimeout(() => dispatch({ type: "SLIDE_COORDINATES" }), 300);
     }
   }, [state.activeCoordinates, state.paused]);
-
-  // useEffect(() => {
-  //   if (isMounted.current && !state.supported) {
-  //     dispatch({
-  //       type: "SUPPORTED",
-  //       payload: { supported: false, paused: true }
-  //     });
-  //   }
-  // }, [state.supported]);
 
   return (
     <>
@@ -672,6 +655,7 @@ const Grid = () => {
         </>
       ) : state.supported && state.gameOver ? (
         <StyledMessageContainer>
+          {/* <StyledMessageInner> */}
           <StyledGameOver>Game Over</StyledGameOver>
           <StyledFinalScoreHeading>
             Final Score:
@@ -680,11 +664,21 @@ const Grid = () => {
           <StyledButtonContainer>
             <button onClick={playAgainHandler}>Play Again</button>
           </StyledButtonContainer>
+          {/* </StyledMessageInner> */}
+        </StyledMessageContainer>
+      ) : !state.supported ? (
+        <StyledMessageContainer>
+          {/* <StyledMessageInner> */}
+          <StyledGameOver>Error</StyledGameOver>
+          <p>Game is not supported at current screen dimensions.</p>
+          <p>Increase dimensions, or use a larger device to play.</p>
+          {/* </StyledMessageInner> */}
         </StyledMessageContainer>
       ) : (
         <StyledMessageContainer>
-          <p>Game is not supported at current screen dimensions.</p>
-          <p>Increase dimensions, or use a larger device to play.</p>
+          <StyledGameOver>Error</StyledGameOver>
+          <p>An unknown error occurred.</p>
+          {/* </StyledMessageInner> */}
         </StyledMessageContainer>
       )}
     </>

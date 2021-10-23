@@ -27,7 +27,6 @@ const reducer = (state, action) => {
       const toastValue = RTR[0] ? 1000 * RTR.length + 100 : 100;
       const scoreValue = state.score + toastValue;
       const commifiedScore = commifyScore(scoreValue);
-      console.log(commifiedScore, "COMMIFIED SCORE AT CFFR");
       return {
         ...state,
         rowsToReset: RTRcheck,
@@ -179,11 +178,11 @@ const reducer = (state, action) => {
         activeKeyCode: action.payload
       };
     case "SET_ACTIVE_SHAPE":
-      console.log(state.commifiedScore, "commified at set_Active_shape");
+      // console.log(state.commifiedScore, "commified at set_Active_shape");
       if (state.endGame) {
         return {
           ...state,
-          // gameOver: true,
+          gameOver: true,
           shouldGenerateNewShape: false,
           nextShape: null,
           // commifiedScore: commifyScore(state.score),
@@ -193,17 +192,21 @@ const reducer = (state, action) => {
         };
       } else if (state.nextShape) {
         const overlapping = state.squares.filter(
-          square =>
-            square.coordinate &&
-            state.nextShape.coordinates.includes(square.coordinate)
+          ({ coordinate }) =>
+            coordinate && state.nextShape.coordinates.includes(coordinate)
         );
-        const rowZeroOverlap = state.squares.filter(
-          square =>
-            square.coordinate &&
-            state.nextShape.coordinates.includes(square.coordinate) &&
-            square.row === 0
-        );
-        if (rowZeroOverlap[0]) {
+        console.log(overlapping, "OVERLAPPING");
+        // const rowZeroOverlap = state.squares.filter(
+        //   ({ coordinate, row }) =>
+        //     coordinate &&
+        //     state.nextShape.coordinates.includes(coordinate) &&
+        //     row === 0
+        // );
+        const firstOverlappingRow = overlapping[0] ? overlapping[0].row : null;
+        const lastOverlappingRow = overlapping[overlapping.length - 1];
+        console.log("FIRST OVERLAP ROW", firstOverlappingRow);
+        if (firstOverlappingRow === 0) {
+          console.log("FIRST OVERLAP = 0");
           return {
             ...state,
             // gameOver: true,
@@ -215,11 +218,24 @@ const reducer = (state, action) => {
             keyPressed: false
           };
         } else if (overlapping[0]) {
-          const overlappingCoordinates = overlapping.map(
-            square => square.coordinate
-          );
+          let adjustment = null;
+          if (
+            overlapping[overlapping.length - 1].row == firstOverlappingRow &&
+            overlapping.length >= 2
+          ) {
+            overlapping.splice(0, 1);
+            adjustment = overlapping.map(coordinate => coordinate - 10);
+          }
+          console.log("ADJUSTMENT", adjustment);
+          const overlappingCoordinates = adjustment
+            ? adjustment
+            : overlapping.map(({ coordinate }) => coordinate);
           const coordinatesToDisplay = state.nextShape.coordinates.filter(
-            coordinate => !overlappingCoordinates.includes(coordinate)
+            coordinate =>
+              coordinate < 10 ||
+              (parseInt(coordinate.toString().slice(0, 1)) <
+                firstOverlappingRow &&
+                !overlappingCoordinates.includes(coordinate))
           );
           console.log("CTD", coordinatesToDisplay);
           return {
@@ -286,7 +302,7 @@ const reducer = (state, action) => {
         }
       };
     case "SLIDE_COORDINATES":
-      console.log("SLIDE");
+      // console.log("SLIDE");
       if (state.endGame) {
         console.log("END GAME");
         return {

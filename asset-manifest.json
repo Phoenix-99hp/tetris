@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.136b29dd.css",
+    "main.js": "/static/js/main.bda641b6.js",
+    "static/media/GeoramaLight.ttf": "/static/media/GeoramaLight.2448f4090bd608c9650d.ttf",
+    "static/media/GeoramaLightItalic.ttf": "/static/media/GeoramaLightItalic.fb0522b3698940bf5edc.ttf",
+    "static/media/GeoramaSemiBoldItalic.ttf": "/static/media/GeoramaSemiBoldItalic.187e25260a11e83f794c.ttf",
+    "index.html": "/index.html",
+    "main.136b29dd.css.map": "/static/css/main.136b29dd.css.map",
+    "main.bda641b6.js.map": "/static/js/main.bda641b6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.136b29dd.css",
+    "static/js/main.bda641b6.js"
+  ]
+}

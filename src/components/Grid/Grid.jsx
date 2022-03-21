@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useReducer, useCallback } from "react";
 import { useTheme } from "styled-components";
 import initialState from "../../initialState";
-import { nextShape } from "../../data";
+import data from "../../data";
 import reducer from "../../reducer";
 import {
   StyledNextShapeContainer,
@@ -30,11 +30,12 @@ import {
   StyledStartPauseButton,
   StyledControlsButton,
   StyledShowHideControlsButton,
-  StyledControlsButtonWrapper
+  StyledControlsButtonWrapper,
 } from "./GridStyle";
 import GridItem from "../GridItem/GridItem.jsx";
 
 const Grid = () => {
+  const { nextShape } = data;
   const [state, dispatch] = useReducer(reducer, initialState);
   const isMounted = useRef(false);
   const theme = useTheme();
@@ -128,16 +129,16 @@ const Grid = () => {
     ) {
       dispatch({
         type: "SUPPORTED",
-        payload: { supported: true }
+        payload: { supported: true },
       });
     } else {
       dispatch({
         type: "SUPPORTED",
-        payload: { supported: false, paused: true }
+        payload: { supported: false, paused: true },
       });
       dispatch({
         type: "START_PAUSE_TEXT",
-        payload: "Start"
+        payload: "Start",
       });
     }
   };
@@ -148,7 +149,7 @@ const Grid = () => {
     if (state.startPauseText) {
       dispatch({
         type: "START_PAUSE_TEXT",
-        payload: null
+        payload: null,
       });
     }
     if (state.paused && !state.countdown) {
@@ -236,7 +237,7 @@ const Grid = () => {
         type: "UPDATE_NEXT_SQUARES",
         payload:
           nextShape[state.nextShape.coordinates.toString()].rows *
-          nextShape[state.nextShape.coordinates.toString()].cols
+          nextShape[state.nextShape.coordinates.toString()].cols,
       });
     } else {
       window.removeEventListener("keydown", keydownHandler);

@@ -3,12 +3,13 @@ import {
   determineOrientation,
   determineStartingCoordinates,
   commifyScore,
-  shouldUpdateCoordinatesOnRotate
+  shouldUpdateCoordinatesOnRotate,
 } from "../helpers";
 import initialState from "../initialState";
-import { nextShape } from "../data";
+import data from "../data";
 
 const reducer = (state, action) => {
+  const { nextShape } = data;
   switch (action.type) {
     case "CHECK_FOR_FULL_ROWS":
       const coordinateRow = [];
@@ -32,12 +33,12 @@ const reducer = (state, action) => {
         rowsToReset: RTRcheck,
         score: scoreValue,
         commifiedScore: commifiedScore,
-        toast: toastValue
+        toast: toastValue,
       };
     case "TOGGLE_SHOW_CONTROLS":
       return {
         ...state,
-        showControls: !state.showControls
+        showControls: !state.showControls,
       };
     case "USE_BUTTONS":
       console.log("USE_BUTTONS REDUCER");
@@ -45,37 +46,37 @@ const reducer = (state, action) => {
         ...state,
         useButtons: true,
         useKeys: false,
-        useTouch: false
+        useTouch: false,
       };
     case "USE_KEYS":
       return {
         ...state,
         useButtons: false,
         useKeys: true,
-        useTouch: false
+        useTouch: false,
       };
     case "USE_TOUCH":
       return {
         ...state,
         useButtons: false,
         useKeys: false,
-        useTouch: true
+        useTouch: true,
       };
     case "SUPPORTED":
       return {
         ...state,
         supported: action.payload.supported,
-        paused: action.payload.paused ? action.payload.paused : state.paused
+        paused: action.payload.paused ? action.payload.paused : state.paused,
       };
     case "START_PAUSE_TEXT":
       return {
         ...state,
-        startPauseText: action.payload
+        startPauseText: action.payload,
       };
     case "RESET_STATE":
       return {
         ...initialState,
-        togglePlayAgain: !state.togglePlayAgain
+        togglePlayAgain: !state.togglePlayAgain,
       };
     case "RESET_ROWS":
       if (state.rowsToReset) {
@@ -85,7 +86,7 @@ const reducer = (state, action) => {
               state.squares.splice(state.squares.indexOf(square), 1, {
                 ...square,
                 color: "red",
-                coordinate: null
+                coordinate: null,
               });
             }
           });
@@ -98,7 +99,7 @@ const reducer = (state, action) => {
                 row: state.squares[i].row + 1,
                 coordinate: state.squares[i].coordinate
                   ? state.squares[i].coordinate + 10
-                  : null
+                  : null,
               });
             }
           }
@@ -107,7 +108,7 @@ const reducer = (state, action) => {
     case "SET_TOAST":
       return {
         ...state,
-        showToast: true
+        showToast: true,
       };
     case "SET_COUNTDOWN":
       return {
@@ -115,19 +116,19 @@ const reducer = (state, action) => {
         showCountdown: true,
         countdown: 3,
         breakCountdown: false,
-        initial: false
+        initial: false,
       };
     case "HIDE_COUNTDOWN":
       return {
         ...state,
         countdown: null,
         showCountdown: false,
-        countdownInProgress: false
+        countdownInProgress: false,
       };
     case "HIDE_TOAST":
       return {
         ...state,
-        showToast: false
+        showToast: false,
       };
     case "PAUSE":
       return {
@@ -135,7 +136,7 @@ const reducer = (state, action) => {
         paused: true,
         countdown: null,
         showCountdown: false,
-        breakCountdown: true
+        breakCountdown: true,
       };
     case "BREAK_COUNTDOWN":
       return {
@@ -143,18 +144,18 @@ const reducer = (state, action) => {
         countdown: null,
         showCountdown: false,
         breakCountdown: true,
-        paused: true
+        paused: true,
       };
     case "COUNTDOWN":
       return {
         ...state,
-        countdown: state.countdown - 1 !== 0 ? state.countdown - 1 : "START"
+        countdown: state.countdown - 1 !== 0 ? state.countdown - 1 : "START",
       };
     case "GAME_OVER":
       return {
         ...state,
         gameOver: true,
-        keyPressed: false
+        keyPressed: false,
         // endGame: true
       };
     case "END_GAME":
@@ -162,20 +163,20 @@ const reducer = (state, action) => {
         ...state,
         // gameOver: true
         keyPressed: false,
-        endGame: true
+        endGame: true,
       };
     case "START":
       return {
         ...state,
         paused: false,
-        initial: false
+        initial: false,
       };
     // }
     case "SET_ACTIVE_KEYCODE":
     case "SET_TOUCH_ACTIVE":
       return {
         ...state,
-        activeKeyCode: action.payload
+        activeKeyCode: action.payload,
       };
     case "SET_ACTIVE_SHAPE":
       // console.log(state.commifiedScore, "commified at set_Active_shape");
@@ -188,7 +189,7 @@ const reducer = (state, action) => {
           // commifiedScore: commifyScore(state.score),
           // gameOver: true,
           // endGame: true,
-          keyPressed: false
+          keyPressed: false,
         };
       } else if (state.nextShape) {
         const overlapping = state.squares.filter(
@@ -215,7 +216,7 @@ const reducer = (state, action) => {
             // commifiedScore: commifyScore(state.score),
             gameOver: true,
             // endGame: true,
-            keyPressed: false
+            keyPressed: false,
           };
         } else if (overlapping[0]) {
           let adjustment = null;
@@ -248,7 +249,7 @@ const reducer = (state, action) => {
             rowsToReset: null,
             endGame: true,
             nextShape: null,
-            shouldGenerateNewShape: false
+            shouldGenerateNewShape: false,
           };
         } else if (state.nextShape.shape.color) {
           const shape = determineShape();
@@ -274,8 +275,8 @@ const reducer = (state, action) => {
               shape: shape,
               orientation: orientation,
               coordinates: coordinates,
-              direction: direction
-            }
+              direction: direction,
+            },
           };
         } else {
           console.log("NO NEXT");
@@ -283,7 +284,7 @@ const reducer = (state, action) => {
             ...state,
             gameOver: true,
             keyPressed: false,
-            shouldGenerateNewShape: false
+            shouldGenerateNewShape: false,
           };
         }
       }
@@ -298,8 +299,8 @@ const reducer = (state, action) => {
           total: newSquares,
           colored: state.nextShape
             ? nextShape[state.nextShape.coordinates.toString()].colored
-            : ""
-        }
+            : "",
+        },
       };
     case "SLIDE_COORDINATES":
       // console.log("SLIDE");
@@ -307,7 +308,7 @@ const reducer = (state, action) => {
         console.log("END GAME");
         return {
           ...state,
-          gameOver: true
+          gameOver: true,
         };
         // return {
         //   keyPressed: false,
@@ -331,7 +332,7 @@ const reducer = (state, action) => {
         return {
           ...state,
           keyPressed: false,
-          activeCoordinates: newSlideCoordinates
+          activeCoordinates: newSlideCoordinates,
         };
       } else {
         return {
@@ -341,18 +342,18 @@ const reducer = (state, action) => {
               ? {
                   ...square,
                   coordinate: i,
-                  color: state.activeShape.color
+                  color: state.activeShape.color,
                 }
               : { ...square }
           ),
           shouldGenerateNewShape: true,
-          keyPressed: false
+          keyPressed: false,
         };
       }
     case "TRIGGER_MANUAL_DOWN":
       if (state.paused) {
         return {
-          ...state
+          ...state,
         };
       } else if (
         !state.activeCoordinates.filter(
@@ -367,7 +368,7 @@ const reducer = (state, action) => {
           ...state,
           activeKeyCode: null,
           keyPressed: true,
-          activeCoordinates: manualCoordinates
+          activeCoordinates: manualCoordinates,
         };
       } else {
         return {
@@ -377,19 +378,19 @@ const reducer = (state, action) => {
               ? {
                   ...square,
                   coordinate: i,
-                  color: state.activeShape.color
+                  color: state.activeShape.color,
                 }
               : { ...square }
           ),
           activeKeyCode: null,
           shouldGenerateNewShape: true,
-          keyPressed: true
+          keyPressed: true,
         };
       }
     case "TRIGGER_MANUAL_RIGHT":
       if (state.paused) {
         return {
-          ...state
+          ...state,
         };
       } else if (
         state.activeCoordinates.filter(coordinate => coordinate > 189)[0]
@@ -401,13 +402,13 @@ const reducer = (state, action) => {
               ? {
                   ...square,
                   coordinate: i,
-                  color: state.activeShape.color
+                  color: state.activeShape.color,
                 }
               : { ...square }
           ),
           shouldGenerateNewShape: true,
           keyPressed: true,
-          activeKeyCode: null
+          activeKeyCode: null,
         };
       } else if (
         !state.activeCoordinates.filter(
@@ -423,20 +424,20 @@ const reducer = (state, action) => {
           ...state,
           keyPressed: true,
           activeCoordinates: rightCoordinates,
-          activeKeyCode: null
+          activeKeyCode: null,
         };
       } else {
         return {
           ...state,
           keyPressed: true,
-          activeKeyCode: null
+          activeKeyCode: null,
         };
       }
     case "TRIGGER_MANUAL_LEFT":
       if (state.paused) {
         return {
           ...state,
-          activeKeyCode: null
+          activeKeyCode: null,
         };
       } else if (
         state.activeCoordinates.filter(coordinate => coordinate > 189)[0]
@@ -448,13 +449,13 @@ const reducer = (state, action) => {
               ? {
                   ...square,
                   coordinate: i,
-                  color: state.activeShape.color
+                  color: state.activeShape.color,
                 }
               : { ...square }
           ),
           shouldGenerateNewShape: true,
           keyPressed: true,
-          activeKeyCode: null
+          activeKeyCode: null,
         };
       } else if (
         !state.activeCoordinates.filter(
@@ -470,19 +471,19 @@ const reducer = (state, action) => {
           ...state,
           keyPressed: true,
           activeCoordinates: leftCoordinates,
-          activeKeyCode: null
+          activeKeyCode: null,
         };
       } else {
         return {
           ...state,
           keyPressed: true,
-          activeKeyCode: null
+          activeKeyCode: null,
         };
       }
     case "TRIGGER_MANUAL_ROTATE":
       if (state.paused) {
         return {
-          ...state
+          ...state,
         };
       } else if (
         state.activeCoordinates.filter(coordinate => coordinate > 189)[0]
@@ -494,13 +495,13 @@ const reducer = (state, action) => {
               ? {
                   ...square,
                   coordinate: i,
-                  color: state.activeShape.color
+                  color: state.activeShape.color,
                 }
               : { ...square }
           ),
           shouldGenerateNewShape: true,
           keyPressed: true,
-          activeKeyCode: null
+          activeKeyCode: null,
         };
       } else if (state.activeShape.num === 1) {
         if (state.activeOrientation === 0 || state.activeOrientation === 2) {
@@ -538,7 +539,7 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates
+              : state.activeCoordinates,
           };
         } else {
           let sortedNewCoordinates = state.activeCoordinates
@@ -575,7 +576,7 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 0 : 1,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates
+              : state.activeCoordinates,
           };
         }
       } else if (state.activeShape.num === 2) {
@@ -615,7 +616,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           } else if (state.activeOrientation === 1) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -652,7 +653,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 2 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           } else if (state.activeOrientation === 2) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -689,7 +690,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 3 : 2,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           } else if (state.activeOrientation === 3) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -726,7 +727,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 3,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           }
         } else {
@@ -765,7 +766,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           } else if (state.activeOrientation === 1) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -802,7 +803,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 2 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           } else if (state.activeOrientation === 2) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -839,7 +840,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 3 : 2,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           } else if (state.activeOrientation === 3) {
             let sortedNewCoordinates = state.activeCoordinates
@@ -876,7 +877,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 3,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           }
         }
@@ -917,7 +918,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           } else if (
             state.activeOrientation === 1 ||
@@ -957,7 +958,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           }
         } else {
@@ -996,7 +997,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           } else if (
             state.activeOrientation === 1 ||
@@ -1036,7 +1037,7 @@ const reducer = (state, action) => {
               activeOrientation: shouldUpdateToNewCoordinates ? 0 : 1,
               activeCoordinates: shouldUpdateToNewCoordinates
                 ? sortedNewCoordinates
-                : state.activeCoordinates
+                : state.activeCoordinates,
             };
           }
         }
@@ -1076,7 +1077,7 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 1 : 0,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates
+              : state.activeCoordinates,
           };
         } else if (state.activeOrientation === 1) {
           let sortedNewCoordinates = state.activeCoordinates
@@ -1113,7 +1114,7 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 2 : 1,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates
+              : state.activeCoordinates,
           };
         } else if (state.activeOrientation === 2) {
           let sortedNewCoordinates = state.activeCoordinates
@@ -1150,7 +1151,7 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 3 : 2,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates
+              : state.activeCoordinates,
           };
         } else if (state.activeOrientation === 3) {
           let sortedNewCoordinates = state.activeCoordinates
@@ -1187,14 +1188,14 @@ const reducer = (state, action) => {
             activeOrientation: shouldUpdateToNewCoordinates ? 0 : 3,
             activeCoordinates: shouldUpdateToNewCoordinates
               ? sortedNewCoordinates
-              : state.activeCoordinates
+              : state.activeCoordinates,
           };
         }
       } else {
         return {
           ...state,
           keyPressed: true,
-          activeKeyCode: null
+          activeKeyCode: null,
         };
       }
     case "KEYUP":
@@ -1207,7 +1208,7 @@ const reducer = (state, action) => {
       // } else {
       return {
         ...state,
-        keyPressed: false
+        keyPressed: false,
       };
     // }
     // } else {
@@ -1216,20 +1217,20 @@ const reducer = (state, action) => {
     case "TOUCH_END":
       return {
         ...state,
-        activeKeyCode: null
+        activeKeyCode: null,
       };
     case "KEYDOWN":
       // if (state.useKeys) {
       return {
         ...state,
-        keyPressed: true
+        keyPressed: true,
       };
     // } else {
     //   return;
     // }
     default:
       return {
-        ...state
+        ...state,
       };
   }
 };

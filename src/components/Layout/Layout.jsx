@@ -4,7 +4,7 @@ import {
   StyledPageInner,
   StyledMainContent,
   StyledHeader,
-  StyledFooter
+  StyledFooter,
 } from "./LayoutStyle";
 
 const Layout = ({ children }) => {
@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
     <StyledPageContainer>
       <StyledPageInner>
         <StyledHeader>
-          <span>Tokyo Tetris</span>
+          <span>Tetris</span>
         </StyledHeader>
         <StyledMainContent>{children}</StyledMainContent>
       </StyledPageInner>

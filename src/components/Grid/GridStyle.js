@@ -159,7 +159,7 @@ export const StyledNextShape = styled.div`
   width: 200px;
   width: 130px;
   box-sizing: content-box;
-  height: 100px;
+  height: 120px;
   ${({ border }) =>
     border &&
     css`
